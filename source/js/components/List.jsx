@@ -40,15 +40,36 @@ var List = React.createClass({
         var listItemElements = this.createListItemElements(items);
 
         return (
+
             <div>
 
                 <h3 className="page-header">
                     <ListHeader totalNumberOfListItems={this.getTotalNumberOfListItems(items)} />
                 </h3>
 
-                <ul>
-                    {listItemElements.length > 0 ? <div class="table"> {listItemElements} </div> : <EmptyList />}
-                </ul>
+
+                    {listItemElements.length > 0 ?
+                <div className="panel panel-primary">
+                    <div className="panel-heading">Prices</div>
+                    <div className="panel-body">
+                        <div className="table">
+
+                        <div className="tr ">
+
+                            <div className="td strong panel-header">Name</div>
+                            <div className="td">Price</div>
+                            <div className="td">Actions</div>
+
+                        </div>
+
+                        {listItemElements}
+
+                    </div>
+                    </div>
+                </div>
+
+                : <EmptyList />}
+
 
             </div>
         );

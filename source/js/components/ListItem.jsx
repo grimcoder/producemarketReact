@@ -17,19 +17,24 @@ var ListItem = React.createClass({
         return (
             <div className="panel panel-primary tr">
 
-                <div className="panel-heading td">
-                    {item.Price} x {item.ItemName}
+                <div className="td">
+
+                    {item.ItemName}
+
                 </div>
 
                 <div className="td">
-                    {item.Price.length > 0 ? <ListItemDescription description={item.Price} /> : ''}
+
+                    {item.Price > 0 ? <ListItemDescription description={item.Price} /> : ''}
+
                 </div>
 
                     <div className="td">
 
-                            <button type="submit" onClick={this.handleSubmit} className="btn btn-default btn-xs">Remove</button>
+                            <button type="submit" onClick={this.handleSubmit} className="btn btn-danger">Remove</button>
 
                     </div>
+
             </div>
         );
     }

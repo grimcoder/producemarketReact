@@ -1,5 +1,3 @@
-
-
 var React = require('react');
 var List = require('./List.jsx');
 var AddListItem = require('./AddListItem.jsx');
@@ -33,16 +31,18 @@ var PriceList = React.createClass({
         return (
 
             <div className="row">
-                <div className="col-sm-6">
+            <div className="col-sm-6">
 
-                     <List items={items} />
-                </div>
-                <div className="col-sm-6">
-
-                     <AddListItem />
-
-                </div>
+                <List items={items} />
             </div>
+            <div className="col-sm-6">
+
+            <AddListItem />
+
+            </div>
+            </div>
+
+
         );
     }
 });

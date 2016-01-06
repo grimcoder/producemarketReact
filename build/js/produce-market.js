@@ -13276,8 +13276,7 @@ module.exports={
     }
   ],
   "directories": {},
-  "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.0.2.tgz",
-  "readme": "ERROR: No README data found!"
+  "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.0.2.tgz"
 }
 
 },{}],66:[function(require,module,exports){
@@ -14721,8 +14720,13 @@ DERNode.prototype._decodeObjid = function decodeObjid(buffer, values, relative) 
   else
     result = [first, second].concat(identifiers.slice(1));
 
-  if (values)
-    result = values[result.join(' ')];
+  if (values) {
+    var tmp = values[result.join(' ')];
+    if (tmp === undefined)
+      tmp = values[result.join('.')];
+    if (tmp !== undefined)
+      result = tmp;
+  }
 
   return result;
 };
@@ -40585,15 +40589,36 @@ var List = React.createClass({displayName: "List",
         var listItemElements = this.createListItemElements(items);
 
         return (
+
             React.createElement("div", null, 
 
                 React.createElement("h3", {className: "page-header"}, 
                     React.createElement(ListHeader, {totalNumberOfListItems: this.getTotalNumberOfListItems(items)})
                 ), 
 
-                React.createElement("ul", null, 
-                    listItemElements.length > 0 ? React.createElement("div", {class: "table"}, " ", listItemElements, " ") : React.createElement(EmptyList, null)
+
+                    listItemElements.length > 0 ?
+                React.createElement("div", {className: "panel panel-primary"}, 
+                    React.createElement("div", {className: "panel-heading"}, "Prices"), 
+                    React.createElement("div", {className: "panel-body"}, 
+                        React.createElement("div", {className: "table"}, 
+
+                        React.createElement("div", {className: "tr "}, 
+
+                            React.createElement("div", {className: "td strong panel-header"}, "Name"), 
+                            React.createElement("div", {className: "td"}, "Price"), 
+                            React.createElement("div", {className: "td"}, "Actions")
+
+                        ), 
+
+                        listItemElements
+
+                    )
+                    )
                 )
+
+                : React.createElement(EmptyList, null)
+
 
             )
         );
@@ -40653,19 +40678,24 @@ var ListItem = React.createClass({displayName: "ListItem",
         return (
             React.createElement("div", {className: "panel panel-primary tr"}, 
 
-                React.createElement("div", {className: "panel-heading td"}, 
-                    item.Price, " x ", item.ItemName
+                React.createElement("div", {className: "td"}, 
+
+                    item.ItemName
+
                 ), 
 
                 React.createElement("div", {className: "td"}, 
-                    item.Price.length > 0 ? React.createElement(ListItemDescription, {description: item.Price}) : ''
+
+                    item.Price > 0 ? React.createElement(ListItemDescription, {description: item.Price}) : ''
+
                 ), 
 
                     React.createElement("div", {className: "td"}, 
 
-                            React.createElement("button", {type: "submit", onClick: this.handleSubmit, className: "btn btn-default btn-xs"}, "Remove")
+                            React.createElement("button", {type: "submit", onClick: this.handleSubmit, className: "btn btn-danger"}, "Remove")
 
                     )
+
             )
         );
     }
@@ -40689,8 +40719,6 @@ var ListItemDescription = React.createClass({displayName: "ListItemDescription",
 module.exports = ListItemDescription;
 
 },{"react":380}],389:[function(require,module,exports){
-
-
 var React = require('react');
 var List = require('./List.jsx');
 var AddListItem = require('./AddListItem.jsx');
@@ -40724,16 +40752,18 @@ var PriceList = React.createClass({displayName: "PriceList",
         return (
 
             React.createElement("div", {className: "row"}, 
-                React.createElement("div", {className: "col-sm-6"}, 
+            React.createElement("div", {className: "col-sm-6"}, 
 
-                     React.createElement(List, {items: items})
-                ), 
-                React.createElement("div", {className: "col-sm-6"}, 
+                React.createElement(List, {items: items})
+            ), 
+            React.createElement("div", {className: "col-sm-6"}, 
 
-                     React.createElement(AddListItem, null)
+            React.createElement(AddListItem, null)
 
-                )
             )
+            )
+
+
         );
     }
 });
