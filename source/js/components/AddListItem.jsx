@@ -60,7 +60,7 @@ var AddListItem = React.createClass({
                     <input type="text" className="form-control" id="listItemName" placeholder="Enter name" onChange={this.handleChange} required ref="ItemName" value={activeRecord.ItemName} />
                 </div>
 
-                <div className="form-group">
+                <div className="form-group invisible">
                     <label htmlFor="listItemDescription">Id</label>
                     <input type="text" disabled className="form-control" rows="3" id="listItemDescription" placeholder="Enter description"  value={activeRecord.Id}  ref="Id"></input>
                 </div>

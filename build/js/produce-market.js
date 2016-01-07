@@ -40525,7 +40525,7 @@ var AddListItem = React.createClass({displayName: "AddListItem",
                     React.createElement("input", {type: "text", className: "form-control", id: "listItemName", placeholder: "Enter name", onChange: this.handleChange, required: true, ref: "ItemName", value: activeRecord.ItemName})
                 ), 
 
-                React.createElement("div", {className: "form-group"}, 
+                React.createElement("div", {className: "form-group invisible"}, 
                     React.createElement("label", {htmlFor: "listItemDescription"}, "Id"), 
                     React.createElement("input", {type: "text", disabled: true, className: "form-control", rows: "3", id: "listItemDescription", placeholder: "Enter description", value: activeRecord.Id, ref: "Id"})
                 ), 
