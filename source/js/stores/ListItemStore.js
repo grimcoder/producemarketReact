@@ -3,7 +3,7 @@ var EventEmitter = require('events').EventEmitter;
 var objectAssign = require('object-assign');
 
 var shoppingList = {6:{"ItemName":"Beet","Price":6,"Id":6},15:{"ItemName":"Cabbage","Price":6,"Id":15},16:{"ItemName":"Green mix","Price":7,"Id":16},17:{"ItemName":"Eggs","Price":6,"Id":17}};
-
+var activeRecord = {};
 function addListItem(listItem) {
     shoppingList[listItem.Id] = listItem;
 
@@ -16,8 +16,15 @@ function removeListItem(listItemId) {
     ListItemStore.emit('change');
 }
 
+function editListItem(listItemId){
+
+    activeRecord = shoppingList[listItemId];
+    ListItemStore.emit('change');
+}
+
 function removeAllListItems() {
     shoppingList = {};
+    activeRecord = {};
 
     ListItemStore.emit('change');
 }
@@ -26,6 +33,10 @@ var ListItemStore = objectAssign({}, EventEmitter.prototype, {
 
     getAllListItems: function () {
         return shoppingList;
+    },
+
+    getActiveRecord: function(){
+        return activeRecord;
     },
 
     addChangeListener: function (changeEventHandler) {

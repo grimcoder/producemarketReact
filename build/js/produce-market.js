@@ -40466,6 +40466,8 @@ module.exports = {
 var React = require('react');
 var uuid = require('node-uuid');
 var ListItemActionCreators = require('../actions/ListItemActionCreators');
+var ListItemStore = require('../stores/ListItemStore');
+
 
 var styleRequired = {
     color: "#ffaaaa"
@@ -40475,9 +40477,9 @@ var AddListItem = React.createClass({displayName: "AddListItem",
 
     handleSubmitEvent: function (event) {
         event.preventDefault();
-
+        var id = this.state.activeRecord.Id ?  this.state.activeRecord.Id : uuid.v4();
         var item = {
-            Id: uuid.v4(),
+            Id: id,
             date: new Date(),
             ItemName: this.refs.ItemName.value.trim(),
             Price: this.refs.Price.value
@@ -40485,27 +40487,49 @@ var AddListItem = React.createClass({displayName: "AddListItem",
 
         ListItemActionCreators.addListItem(item);
     },
+    getInitialState: function () {
+        return this.getActiveRecord();
+    },
+    updateState: function () {
+        this.setState(this.getActiveRecord());
+    },
+
+    getActiveRecord: function () {
+        return {
+            activeRecord: ListItemStore.getActiveRecord()
+        };
+    },
+
+    componentDidMount: function () {
+        ListItemStore.addChangeListener(this.updateState);
+    },
+
+    componentWillUnmount: function () {
+        ListItemStore.removeChangeListener(this.updateState);
+    },
+
 
     render: function () {
+        var activeRecord = this.state.activeRecord;
         return (
             React.createElement("form", {onSubmit: this.handleSubmitEvent}, 
                 React.createElement("h3", {className: "page-header"}, "Add New price"), 
 
                 React.createElement("div", {className: "form-group"}, 
                     React.createElement("label", {htmlFor: "listItemName"}, "Name ", React.createElement("span", {style: styleRequired}, "*")), 
-                    React.createElement("input", {type: "text", className: "form-control", id: "listItemName", placeholder: "Enter name", required: true, ref: "ItemName"})
+                    React.createElement("input", {type: "text", className: "form-control", id: "listItemName", placeholder: "Enter name", required: true, ref: "ItemName", value: activeRecord.ItemName})
                 ), 
 
                 React.createElement("div", {className: "form-group"}, 
                     React.createElement("label", {htmlFor: "listItemDescription"}, "Id"), 
-                    React.createElement("input", {type: "text", disabled: true, className: "form-control", rows: "3", id: "listItemDescription", placeholder: "Enter description", ref: "Id"})
+                    React.createElement("input", {type: "text", disabled: true, className: "form-control", rows: "3", id: "listItemDescription", placeholder: "Enter description", value: activeRecord.Id, ref: "Id"})
                 ), 
 
                 React.createElement("div", {className: "form-group"}, 
                     React.createElement("label", {htmlFor: "listItemQuantity"}, "Price ", React.createElement("span", {style: styleRequired}, "*")), 
                     React.createElement("div", {className: "row"}, 
                         React.createElement("div", {className: "col-xs-5 col-sm-6 col-md-4"}, 
-                            React.createElement("input", {type: "number", min: "1", max: "9999", step: "1", defaultValue: "1", className: "form-control", id: "listItemQuantity", required: true, ref: "Price"})
+                            React.createElement("input", {type: "number", min: "1", max: "9999", step: "1", defaultValue: "1", className: "form-control", id: "listItemQuantity", value: activeRecord.Price, required: true, ref: "Price"})
                         )
                     )
                 ), 
@@ -40521,7 +40545,7 @@ var AddListItem = React.createClass({displayName: "AddListItem",
 
 module.exports = AddListItem;
 
-},{"../actions/ListItemActionCreators":381,"node-uuid":222,"react":380}],383:[function(require,module,exports){
+},{"../actions/ListItemActionCreators":381,"../stores/ListItemStore":391,"node-uuid":222,"react":380}],383:[function(require,module,exports){
 var React = require('react');
 var PriceList = require('./PriceList.jsx');
 
@@ -40709,7 +40733,7 @@ var ListItem = React.createClass({displayName: "ListItem",
                     ), 
                     React.createElement("div", {className: "td"}, 
 
-                            React.createElement("button", {type: "submit", onClick: this.handleSubmit, className: "btn btn-edit"}, "Edit")
+                            React.createElement("button", {type: "submit", onClick: this.handleEdit, className: "btn btn-edit"}, "Edit")
 
                     )
 
@@ -40798,7 +40822,7 @@ var EventEmitter = require('events').EventEmitter;
 var objectAssign = require('object-assign');
 
 var shoppingList = {6:{"ItemName":"Beet","Price":6,"Id":6},15:{"ItemName":"Cabbage","Price":6,"Id":15},16:{"ItemName":"Green mix","Price":7,"Id":16},17:{"ItemName":"Eggs","Price":6,"Id":17}};
-
+var activeRecord = {};
 function addListItem(listItem) {
     shoppingList[listItem.Id] = listItem;
 
@@ -40811,8 +40835,15 @@ function removeListItem(listItemId) {
     ListItemStore.emit('change');
 }
 
+function editListItem(listItemId){
+
+    activeRecord = shoppingList[listItemId];
+    ListItemStore.emit('change');
+}
+
 function removeAllListItems() {
     shoppingList = {};
+    activeRecord = {};
 
     ListItemStore.emit('change');
 }
@@ -40821,6 +40852,10 @@ var ListItemStore = objectAssign({}, EventEmitter.prototype, {
 
     getAllListItems: function () {
         return shoppingList;
+    },
+
+    getActiveRecord: function(){
+        return activeRecord;
     },
 
     addChangeListener: function (changeEventHandler) {
