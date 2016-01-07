@@ -10,14 +10,17 @@ var styleRequired = {
 
     var AddListItem = React.createClass({
 
+
     handleChange : function(event){
-        var id = this.state.activeRecord.Id; // ?  this.state.activeRecord.Id : uuid.v4();
+        var id = this.state.activeRecord.Id;
         var item = {
             Id: id,
             date: new Date(),
             ItemName: this.refs.ItemName.value,
             Price: this.refs.Price.value
         };
+
+        //this.setState({});
 
         this.setState({activeRecord: item});
 
@@ -46,7 +49,11 @@ var styleRequired = {
 
     getActiveRecord: function () {
         return {
-            activeRecord: ListItemStore.getActiveRecord()
+
+            activeRecord: ListItemStore.getActiveRecord(),
+
+            'addeditbutton': "Add to list"
+
         };
     },
 
@@ -60,9 +67,12 @@ var styleRequired = {
 
     render: function () {
         var activeRecord = this.state.activeRecord;
+        var addeditbutton = !activeRecord.Id ? "Add" : "Edit";
+        var addeditTitle = !activeRecord.Id ? "Add New price" : "Edit price";
+
         return (
             <form onSubmit={this.handleSubmitEvent}>
-                <h3 className="page-header">Add New price</h3>
+                <h3 className="page-header">{addeditTitle}</h3>
 
                 <div className="form-group">
                     <label htmlFor="listItemName">Name <span style={styleRequired}>*</span></label>
@@ -85,7 +95,7 @@ var styleRequired = {
 
                 <hr />
 
-                <button type="submit" className="btn btn-primary">Add to list</button>
+                <button type="submit" className="btn btn-primary">{addeditbutton}</button>
                 <button type="reset" onClick={this.resetForm} className="btn btn-link">Cancel</button>
             </form>
         );

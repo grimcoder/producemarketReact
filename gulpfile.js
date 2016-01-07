@@ -39,6 +39,7 @@ gulp.task('html-production', function () {
 
 gulp.task('watch', function () {
     gulp.watch('./source/js/**/*.jsx', ['js-development']);
+    gulp.watch('./source/js/**/Sales/*.jsx', ['js-development']);
     gulp.watch('./source/js/**/*.js', ['js-development']);
     gulp.watch('./source/**/*.html', ['html-development']);
 });
