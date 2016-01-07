@@ -49701,7 +49701,7 @@ var styleRequired = {
     var AddListItem = React.createClass({displayName: "AddListItem",
 
     handleChange : function(event){
-        var id = this.state.activeRecord.Id ?  this.state.activeRecord.Id : uuid.v4();
+        var id = this.state.activeRecord.Id; // ?  this.state.activeRecord.Id : uuid.v4();
         var item = {
             Id: id,
             date: new Date(),
@@ -50059,19 +50059,31 @@ var Dispatcher = require('../dispatcher/Dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var objectAssign = require('object-assign');
 var $ = require('jquery');
+var apiHost = "http://" + 'taraskovtun.com' + ":3001";
 
-var shoppingList = {6:{"ItemName":"Beet","Price":6,"Id":6},15:{"ItemName":"Cabbage","Price":6,"Id":15},16:{"ItemName":"Green mix","Price":7,"Id":16},17:{"ItemName":"Eggs","Price":6,"Id":17}};
+var shoppingList = {};
 
 var activeRecord = {};
 
 function addListItem(listItem) {
     shoppingList[listItem.Id] = listItem;
 
-    ListItemStore.emit('pricesRecieved',shoppingList);
+    $.post(apiHost + "/api/prices", listItem, function() {
+        ListItemStore.emit('pricesRecieved',shoppingList);
+    });
 }
 
 function removeListItem(listItemId) {
     delete shoppingList[listItemId];
+
+
+    $.ajax({
+        url: apiHost + '/api/prices?id=' + listItemId,
+        type: 'DELETE',
+        success: function(result) {
+            // Do something with the result
+        }
+    });
 
     ListItemStore.emit('pricesRecieved',shoppingList);
 }
@@ -50099,7 +50111,7 @@ function removeAllListItems() {
 var ListItemStore = objectAssign({}, EventEmitter.prototype, {
 
     getAllListItems: function () {
-        $.get('http://taraskovtun.com:3001/api/prices', function(result) {
+        $.get(apiHost + '/api/prices', function(result) {
 
             result.map(function(item){
                 shoppingList[item.Id] = item;

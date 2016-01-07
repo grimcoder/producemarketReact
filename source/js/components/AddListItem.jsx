@@ -11,7 +11,7 @@ var styleRequired = {
     var AddListItem = React.createClass({
 
     handleChange : function(event){
-        var id = this.state.activeRecord.Id ?  this.state.activeRecord.Id : uuid.v4();
+        var id = this.state.activeRecord.Id; // ?  this.state.activeRecord.Id : uuid.v4();
         var item = {
             Id: id,
             date: new Date(),
