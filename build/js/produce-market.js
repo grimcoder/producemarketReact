@@ -40474,6 +40474,17 @@ var styleRequired = {
 };
 
 var AddListItem = React.createClass({displayName: "AddListItem",
+    handleChange : function(event){
+        var id = this.state.activeRecord.Id ?  this.state.activeRecord.Id : uuid.v4();
+        var item = {
+            Id: id,
+            date: new Date(),
+            ItemName: this.refs.ItemName.value.trim(),
+            Price: this.refs.Price.value
+        };
+        this.setState({activeRecord: item});
+
+    },
 
     handleSubmitEvent: function (event) {
         event.preventDefault();
@@ -40517,7 +40528,7 @@ var AddListItem = React.createClass({displayName: "AddListItem",
 
                 React.createElement("div", {className: "form-group"}, 
                     React.createElement("label", {htmlFor: "listItemName"}, "Name ", React.createElement("span", {style: styleRequired}, "*")), 
-                    React.createElement("input", {type: "text", className: "form-control", id: "listItemName", placeholder: "Enter name", required: true, ref: "ItemName", value: activeRecord.ItemName})
+                    React.createElement("input", {type: "text", className: "form-control", id: "listItemName", placeholder: "Enter name", onChange: this.handleChange, required: true, ref: "ItemName", value: activeRecord.ItemName})
                 ), 
 
                 React.createElement("div", {className: "form-group"}, 
@@ -40529,7 +40540,7 @@ var AddListItem = React.createClass({displayName: "AddListItem",
                     React.createElement("label", {htmlFor: "listItemQuantity"}, "Price ", React.createElement("span", {style: styleRequired}, "*")), 
                     React.createElement("div", {className: "row"}, 
                         React.createElement("div", {className: "col-xs-5 col-sm-6 col-md-4"}, 
-                            React.createElement("input", {type: "number", min: "1", max: "9999", step: "1", defaultValue: "1", className: "form-control", id: "listItemQuantity", value: activeRecord.Price, required: true, ref: "Price"})
+                            React.createElement("input", {type: "number", min: "1", max: "9999", step: "1", defaultValue: "1", className: "form-control", onChange: this.handleChange, id: "listItemQuantity", value: activeRecord.Price, required: true, ref: "Price"})
                         )
                     )
                 ), 

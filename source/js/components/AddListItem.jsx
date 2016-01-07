@@ -9,6 +9,17 @@ var styleRequired = {
 };
 
 var AddListItem = React.createClass({
+    handleChange : function(event){
+        var id = this.state.activeRecord.Id ?  this.state.activeRecord.Id : uuid.v4();
+        var item = {
+            Id: id,
+            date: new Date(),
+            ItemName: this.refs.ItemName.value.trim(),
+            Price: this.refs.Price.value
+        };
+        this.setState({activeRecord: item});
+
+    },
 
     handleSubmitEvent: function (event) {
         event.preventDefault();
@@ -52,7 +63,7 @@ var AddListItem = React.createClass({
 
                 <div className="form-group">
                     <label htmlFor="listItemName">Name <span style={styleRequired}>*</span></label>
-                    <input type="text" className="form-control" id="listItemName" placeholder="Enter name" required ref="ItemName" value={activeRecord.ItemName} />
+                    <input type="text" className="form-control" id="listItemName" placeholder="Enter name" onChange={this.handleChange} required ref="ItemName" value={activeRecord.ItemName} />
                 </div>
 
                 <div className="form-group">
@@ -64,7 +75,7 @@ var AddListItem = React.createClass({
                     <label htmlFor="listItemQuantity">Price <span style={styleRequired}>*</span></label>
                     <div className="row">
                         <div className="col-xs-5 col-sm-6 col-md-4">
-                            <input type="number" min="1" max="9999" step="1" defaultValue="1" className="form-control" id="listItemQuantity"  value={activeRecord.Price}  required ref="Price" />
+                            <input type="number" min="1" max="9999" step="1" defaultValue="1" className="form-control" onChange={this.handleChange} id="listItemQuantity"  value={activeRecord.Price}  required ref="Price" />
                         </div>
                     </div>
                 </div>
