@@ -6,7 +6,7 @@ var EmptyList = require('./EmptyList.jsx');
 var List = React.createClass({
 
     getListOfItemIds: function (items) {
-        return Object.keys(items);
+        return items ? Object.keys(items) : [];
     },
 
     getTotalNumberOfListItems: function (items) {
@@ -15,7 +15,7 @@ var List = React.createClass({
 
 
 
-        return Object.keys(items).length;
+        return items ? Object.keys(items).length : [];
     },
 
     createListItemElements: function (items) {

@@ -1,9 +1,11 @@
 var Dispatcher = require('../dispatcher/Dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var objectAssign = require('object-assign');
+var $ = require('jquery');
 
 var shoppingList = {6:{"ItemName":"Beet","Price":6,"Id":6},15:{"ItemName":"Cabbage","Price":6,"Id":15},16:{"ItemName":"Green mix","Price":7,"Id":16},17:{"ItemName":"Eggs","Price":6,"Id":17}};
 var activeRecord = {};
+
 function addListItem(listItem) {
     shoppingList[listItem.Id] = listItem;
 
@@ -32,6 +34,20 @@ function removeAllListItems() {
 var ListItemStore = objectAssign({}, EventEmitter.prototype, {
 
     getAllListItems: function () {
+        $.get('http://taraskovtun.com:3001/api/prices', function(result) {
+
+            result.map(function(item){
+                shoppingList[item.Id] = item;
+
+            });
+            ListItemStore.emit('pricesRecieved');
+
+
+        }.bind(this));
+
+    },
+
+    getPrices: function () {
         return shoppingList;
     },
 
@@ -45,6 +61,16 @@ var ListItemStore = objectAssign({}, EventEmitter.prototype, {
 
     removeChangeListener: function (changeEventHandler) {
         this.removeListener('change', changeEventHandler);
+    }
+
+    ,
+
+    addpricesRecievedListener: function (changeEventHandler) {
+        this.on('pricesRecieved', changeEventHandler);
+    },
+
+    removepricesRecievedListener: function (changeEventHandler) {
+        this.removeListener('pricesRecieved', changeEventHandler);
     }
 
 });

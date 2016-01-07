@@ -5,25 +5,24 @@ var ListItemStore = require('../stores/ListItemStore');
 var PriceList = React.createClass({
 
     getInitialState: function () {
-        return this.getList();
+        this.getList();
+        return {};
     },
 
-    updateState: function () {
-        this.setState(this.getList());
+    updateState: function (state) {
+        this.setState({list:  ListItemStore.getPrices()});
     },
 
     getList: function () {
-        return {
-            list: ListItemStore.getAllListItems()
-        };
+        ListItemStore.getAllListItems()
     },
 
     componentDidMount: function () {
-        ListItemStore.addChangeListener(this.updateState);
+        ListItemStore.addpricesRecievedListener(this.updateState);
     },
 
     componentWillUnmount: function () {
-        ListItemStore.removeChangeListener(this.updateState);
+        ListItemStore.removepricesRecievedListener(this.updateState);
     },
 
 
