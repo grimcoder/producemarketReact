@@ -40479,7 +40479,7 @@ var AddListItem = React.createClass({displayName: "AddListItem",
         var item = {
             Id: id,
             date: new Date(),
-            ItemName: this.refs.ItemName.value.trim(),
+            ItemName: this.refs.ItemName.value,
             Price: this.refs.Price.value
         };
         this.setState({activeRecord: item});
@@ -40488,15 +40488,9 @@ var AddListItem = React.createClass({displayName: "AddListItem",
 
     handleSubmitEvent: function (event) {
         event.preventDefault();
-        var id = this.state.activeRecord.Id ?  this.state.activeRecord.Id : uuid.v4();
-        var item = {
-            Id: id,
-            date: new Date(),
-            ItemName: this.refs.ItemName.value.trim(),
-            Price: this.refs.Price.value
-        };
 
-        ListItemActionCreators.addListItem(item);
+
+        ListItemActionCreators.addListItem(this.state.activeRecord);
     },
     getInitialState: function () {
         return this.getActiveRecord();
