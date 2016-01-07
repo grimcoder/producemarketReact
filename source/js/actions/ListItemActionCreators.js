@@ -35,9 +35,22 @@ function removeAllListItems() {
     Dispatcher.dispatch(action);
 }
 
+
+
+function resetActiveRecord() {
+    var action = {
+        type: 'reset_Active_Record'
+    };
+
+    Dispatcher.dispatch(action);
+}
+
+
+
 module.exports = {
     addListItem: addListItem,
     removeListItem: removeListItem,
     editListItem: editListItem,
-    removeAllListItems: removeAllListItems
+    removeAllListItems: removeAllListItems,
+    resetActiveRecord : resetActiveRecord
 };

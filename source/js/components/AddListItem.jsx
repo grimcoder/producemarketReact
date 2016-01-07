@@ -8,7 +8,8 @@ var styleRequired = {
     color: "#ffaaaa"
 };
 
-var AddListItem = React.createClass({
+    var AddListItem = React.createClass({
+
     handleChange : function(event){
         var id = this.state.activeRecord.Id ?  this.state.activeRecord.Id : uuid.v4();
         var item = {
@@ -17,19 +18,28 @@ var AddListItem = React.createClass({
             ItemName: this.refs.ItemName.value,
             Price: this.refs.Price.value
         };
+
         this.setState({activeRecord: item});
 
     },
 
-    handleSubmitEvent: function (event) {
+    resetForm : function(){
+        ListItemActionCreators.resetActiveRecord();
+    },
+
+    handleSubmitEvent: function (event){
+
         event.preventDefault();
 
-
         ListItemActionCreators.addListItem(this.state.activeRecord);
+        ListItemActionCreators.resetActiveRecord();
+
     },
-    getInitialState: function () {
+
+    getInitialState: function (){
         return this.getActiveRecord();
     },
+
     updateState: function () {
         this.setState(this.getActiveRecord());
     },
@@ -48,7 +58,6 @@ var AddListItem = React.createClass({
         ListItemStore.removeChangeListener(this.updateState);
     },
 
-
     render: function () {
         var activeRecord = this.state.activeRecord;
         return (
@@ -60,11 +69,6 @@ var AddListItem = React.createClass({
                     <input type="text" className="form-control" id="listItemName" placeholder="Enter name" onChange={this.handleChange} required ref="ItemName" value={activeRecord.ItemName} />
                 </div>
 
-                <div className="form-group invisible">
-                    <label htmlFor="listItemDescription">Id</label>
-                    <input type="text" disabled className="form-control" rows="3" id="listItemDescription" placeholder="Enter description"  value={activeRecord.Id}  ref="Id"></input>
-                </div>
-
                 <div className="form-group">
                     <label htmlFor="listItemQuantity">Price <span style={styleRequired}>*</span></label>
                     <div className="row">
@@ -74,10 +78,15 @@ var AddListItem = React.createClass({
                     </div>
                 </div>
 
+                <div className="form-group invisible">
+                    <label htmlFor="listItemDescription">Id</label>
+                    <input type="text" disabled className="form-control" rows="3" id="listItemDescription" placeholder="Enter description"  value={activeRecord.Id}  ref="Id"></input>
+                </div>
+
                 <hr />
 
                 <button type="submit" className="btn btn-primary">Add to list</button>
-                <button type="reset" className="btn btn-link">Cancel</button>
+                <button type="reset" onClick={this.resetForm} className="btn btn-link">Cancel</button>
             </form>
         );
     }

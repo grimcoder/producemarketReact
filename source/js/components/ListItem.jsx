@@ -44,7 +44,7 @@ var ListItem = React.createClass({
                     </div>
                     <div className="td">
 
-                            <button type="submit" onClick={this.handleEdit} className="btn btn-edit">Edit</button>
+                            <button type="submit" onClick={this.handleEdit} className="btn btn-primary">Edit</button>
 
                     </div>
 

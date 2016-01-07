@@ -4,23 +4,31 @@ var objectAssign = require('object-assign');
 var $ = require('jquery');
 
 var shoppingList = {6:{"ItemName":"Beet","Price":6,"Id":6},15:{"ItemName":"Cabbage","Price":6,"Id":15},16:{"ItemName":"Green mix","Price":7,"Id":16},17:{"ItemName":"Eggs","Price":6,"Id":17}};
+
 var activeRecord = {};
 
 function addListItem(listItem) {
     shoppingList[listItem.Id] = listItem;
 
-    ListItemStore.emit('change');
+    ListItemStore.emit('pricesRecieved',shoppingList);
 }
 
 function removeListItem(listItemId) {
     delete shoppingList[listItemId];
 
-    ListItemStore.emit('change');
+    ListItemStore.emit('pricesRecieved',shoppingList);
 }
 
 function editListItem(listItemId){
 
     activeRecord = shoppingList[listItemId];
+    ListItemStore.emit('change');
+}
+
+function resetActiveRecord(){
+
+    activeRecord = {};
+
     ListItemStore.emit('change');
 }
 
@@ -38,22 +46,16 @@ var ListItemStore = objectAssign({}, EventEmitter.prototype, {
 
             result.map(function(item){
                 shoppingList[item.Id] = item;
-
             });
-            ListItemStore.emit('pricesRecieved');
 
-
+            ListItemStore.emit('pricesRecieved',shoppingList);
         }.bind(this));
-
-    },
-
-    getPrices: function () {
-        return shoppingList;
     },
 
     getActiveRecord: function(){
         return activeRecord;
     },
+
 
     addChangeListener: function (changeEventHandler) {
         this.on('change', changeEventHandler);
@@ -61,9 +63,7 @@ var ListItemStore = objectAssign({}, EventEmitter.prototype, {
 
     removeChangeListener: function (changeEventHandler) {
         this.removeListener('change', changeEventHandler);
-    }
-
-    ,
+    },
 
     addpricesRecievedListener: function (changeEventHandler) {
         this.on('pricesRecieved', changeEventHandler);
@@ -84,6 +84,8 @@ function handleAction(action) {
             editListItem(action.itemId);
     } else if (action.type === 'remove_all_list_items') {
         removeAllListItems();
+    }else if (action.type === 'reset_Active_Record') {
+        resetActiveRecord();
     }
 }
 

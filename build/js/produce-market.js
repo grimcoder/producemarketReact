@@ -49667,11 +49667,24 @@ function removeAllListItems() {
     Dispatcher.dispatch(action);
 }
 
+
+
+function resetActiveRecord() {
+    var action = {
+        type: 'reset_Active_Record'
+    };
+
+    Dispatcher.dispatch(action);
+}
+
+
+
 module.exports = {
     addListItem: addListItem,
     removeListItem: removeListItem,
     editListItem: editListItem,
-    removeAllListItems: removeAllListItems
+    removeAllListItems: removeAllListItems,
+    resetActiveRecord : resetActiveRecord
 };
 
 },{"../dispatcher/Dispatcher":391}],383:[function(require,module,exports){
@@ -49685,7 +49698,8 @@ var styleRequired = {
     color: "#ffaaaa"
 };
 
-var AddListItem = React.createClass({displayName: "AddListItem",
+    var AddListItem = React.createClass({displayName: "AddListItem",
+
     handleChange : function(event){
         var id = this.state.activeRecord.Id ?  this.state.activeRecord.Id : uuid.v4();
         var item = {
@@ -49694,19 +49708,28 @@ var AddListItem = React.createClass({displayName: "AddListItem",
             ItemName: this.refs.ItemName.value,
             Price: this.refs.Price.value
         };
+
         this.setState({activeRecord: item});
 
     },
 
-    handleSubmitEvent: function (event) {
+    resetForm : function(){
+        ListItemActionCreators.resetActiveRecord();
+    },
+
+    handleSubmitEvent: function (event){
+
         event.preventDefault();
 
-
         ListItemActionCreators.addListItem(this.state.activeRecord);
+        ListItemActionCreators.resetActiveRecord();
+
     },
-    getInitialState: function () {
+
+    getInitialState: function (){
         return this.getActiveRecord();
     },
+
     updateState: function () {
         this.setState(this.getActiveRecord());
     },
@@ -49725,7 +49748,6 @@ var AddListItem = React.createClass({displayName: "AddListItem",
         ListItemStore.removeChangeListener(this.updateState);
     },
 
-
     render: function () {
         var activeRecord = this.state.activeRecord;
         return (
@@ -49737,11 +49759,6 @@ var AddListItem = React.createClass({displayName: "AddListItem",
                     React.createElement("input", {type: "text", className: "form-control", id: "listItemName", placeholder: "Enter name", onChange: this.handleChange, required: true, ref: "ItemName", value: activeRecord.ItemName})
                 ), 
 
-                React.createElement("div", {className: "form-group invisible"}, 
-                    React.createElement("label", {htmlFor: "listItemDescription"}, "Id"), 
-                    React.createElement("input", {type: "text", disabled: true, className: "form-control", rows: "3", id: "listItemDescription", placeholder: "Enter description", value: activeRecord.Id, ref: "Id"})
-                ), 
-
                 React.createElement("div", {className: "form-group"}, 
                     React.createElement("label", {htmlFor: "listItemQuantity"}, "Price ", React.createElement("span", {style: styleRequired}, "*")), 
                     React.createElement("div", {className: "row"}, 
@@ -49751,10 +49768,15 @@ var AddListItem = React.createClass({displayName: "AddListItem",
                     )
                 ), 
 
+                React.createElement("div", {className: "form-group invisible"}, 
+                    React.createElement("label", {htmlFor: "listItemDescription"}, "Id"), 
+                    React.createElement("input", {type: "text", disabled: true, className: "form-control", rows: "3", id: "listItemDescription", placeholder: "Enter description", value: activeRecord.Id, ref: "Id"})
+                ), 
+
                 React.createElement("hr", null), 
 
                 React.createElement("button", {type: "submit", className: "btn btn-primary"}, "Add to list"), 
-                React.createElement("button", {type: "reset", className: "btn btn-link"}, "Cancel")
+                React.createElement("button", {type: "reset", onClick: this.resetForm, className: "btn btn-link"}, "Cancel")
             )
         );
     }
@@ -49950,7 +49972,7 @@ var ListItem = React.createClass({displayName: "ListItem",
                     ), 
                     React.createElement("div", {className: "td"}, 
 
-                            React.createElement("button", {type: "submit", onClick: this.handleEdit, className: "btn btn-edit"}, "Edit")
+                            React.createElement("button", {type: "submit", onClick: this.handleEdit, className: "btn btn-primary"}, "Edit")
 
                     )
 
@@ -49989,7 +50011,7 @@ var PriceList = React.createClass({displayName: "PriceList",
     },
 
     updateState: function (state) {
-        this.setState({list:  ListItemStore.getPrices()});
+        this.setState({list:  state});
     },
 
     getList: function () {
@@ -50039,23 +50061,31 @@ var objectAssign = require('object-assign');
 var $ = require('jquery');
 
 var shoppingList = {6:{"ItemName":"Beet","Price":6,"Id":6},15:{"ItemName":"Cabbage","Price":6,"Id":15},16:{"ItemName":"Green mix","Price":7,"Id":16},17:{"ItemName":"Eggs","Price":6,"Id":17}};
+
 var activeRecord = {};
 
 function addListItem(listItem) {
     shoppingList[listItem.Id] = listItem;
 
-    ListItemStore.emit('change');
+    ListItemStore.emit('pricesRecieved',shoppingList);
 }
 
 function removeListItem(listItemId) {
     delete shoppingList[listItemId];
 
-    ListItemStore.emit('change');
+    ListItemStore.emit('pricesRecieved',shoppingList);
 }
 
 function editListItem(listItemId){
 
     activeRecord = shoppingList[listItemId];
+    ListItemStore.emit('change');
+}
+
+function resetActiveRecord(){
+
+    activeRecord = {};
+
     ListItemStore.emit('change');
 }
 
@@ -50073,22 +50103,16 @@ var ListItemStore = objectAssign({}, EventEmitter.prototype, {
 
             result.map(function(item){
                 shoppingList[item.Id] = item;
-
             });
-            ListItemStore.emit('pricesRecieved');
 
-
+            ListItemStore.emit('pricesRecieved',shoppingList);
         }.bind(this));
-
-    },
-
-    getPrices: function () {
-        return shoppingList;
     },
 
     getActiveRecord: function(){
         return activeRecord;
     },
+
 
     addChangeListener: function (changeEventHandler) {
         this.on('change', changeEventHandler);
@@ -50096,9 +50120,7 @@ var ListItemStore = objectAssign({}, EventEmitter.prototype, {
 
     removeChangeListener: function (changeEventHandler) {
         this.removeListener('change', changeEventHandler);
-    }
-
-    ,
+    },
 
     addpricesRecievedListener: function (changeEventHandler) {
         this.on('pricesRecieved', changeEventHandler);
@@ -50119,6 +50141,8 @@ function handleAction(action) {
             editListItem(action.itemId);
     } else if (action.type === 'remove_all_list_items') {
         removeAllListItems();
+    }else if (action.type === 'reset_Active_Record') {
+        resetActiveRecord();
     }
 }
 

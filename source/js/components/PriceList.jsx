@@ -10,7 +10,7 @@ var PriceList = React.createClass({
     },
 
     updateState: function (state) {
-        this.setState({list:  ListItemStore.getPrices()});
+        this.setState({list:  state});
     },
 
     getList: function () {
