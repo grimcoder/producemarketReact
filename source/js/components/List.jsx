@@ -13,12 +13,9 @@ var List = React.createClass({
         var totalNumberOfItems = 0;
         var item;
 
-        this.getListOfItemIds(items).forEach(function (itemId) {
-            item = items[itemId];
-            totalNumberOfItems = totalNumberOfItems + parseInt(item.quantity, 10);
-        });
 
-        return totalNumberOfItems;
+
+        return Object.keys(items).length;
     },
 
     createListItemElements: function (items) {
@@ -58,7 +55,8 @@ var List = React.createClass({
 
                             <div className="td strong panel-header">Name</div>
                             <div className="td">Price</div>
-                            <div className="td">Actions</div>
+                            <div className="td"></div>
+                            <div className="td"></div>
 
                         </div>
 

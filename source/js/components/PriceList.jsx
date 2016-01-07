@@ -26,6 +26,7 @@ var PriceList = React.createClass({
         ListItemStore.removeChangeListener(this.updateState);
     },
 
+
     render: function () {
         var items = this.state.list;
         return (

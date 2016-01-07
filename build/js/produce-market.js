@@ -13276,7 +13276,8 @@ module.exports={
     }
   ],
   "directories": {},
-  "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.0.2.tgz"
+  "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.0.2.tgz",
+  "readme": "ERROR: No README data found!"
 }
 
 },{}],66:[function(require,module,exports){
@@ -14720,13 +14721,8 @@ DERNode.prototype._decodeObjid = function decodeObjid(buffer, values, relative) 
   else
     result = [first, second].concat(identifiers.slice(1));
 
-  if (values) {
-    var tmp = values[result.join(' ')];
-    if (tmp === undefined)
-      tmp = values[result.join('.')];
-    if (tmp !== undefined)
-      result = tmp;
-  }
+  if (values)
+    result = values[result.join(' ')];
 
   return result;
 };
@@ -40442,6 +40438,15 @@ function removeListItem(itemId) {
     Dispatcher.dispatch(action);
 }
 
+function editListItem(itemId) {
+    var action = {
+        type: 'edit_list_item',
+        itemId: itemId
+    };
+
+    Dispatcher.dispatch(action);
+}
+
 function removeAllListItems() {
     var action = {
         type: 'remove_all_list_items'
@@ -40453,6 +40458,7 @@ function removeAllListItems() {
 module.exports = {
     addListItem: addListItem,
     removeListItem: removeListItem,
+    editListItem: editListItem,
     removeAllListItems: removeAllListItems
 };
 
@@ -40562,12 +40568,9 @@ var List = React.createClass({displayName: "List",
         var totalNumberOfItems = 0;
         var item;
 
-        this.getListOfItemIds(items).forEach(function (itemId) {
-            item = items[itemId];
-            totalNumberOfItems = totalNumberOfItems + parseInt(item.quantity, 10);
-        });
 
-        return totalNumberOfItems;
+
+        return Object.keys(items).length;
     },
 
     createListItemElements: function (items) {
@@ -40607,7 +40610,8 @@ var List = React.createClass({displayName: "List",
 
                             React.createElement("div", {className: "td strong panel-header"}, "Name"), 
                             React.createElement("div", {className: "td"}, "Price"), 
-                            React.createElement("div", {className: "td"}, "Actions")
+                            React.createElement("div", {className: "td"}), 
+                            React.createElement("div", {className: "td"})
 
                         ), 
 
@@ -40673,6 +40677,14 @@ var ListItem = React.createClass({displayName: "ListItem",
         ListItemActionCreators.removeListItem(listItemId);
     },
 
+    handleEdit: function (event) {
+        event.preventDefault();
+
+        var listItemId = this.props.item.Id;
+
+        ListItemActionCreators.editListItem(listItemId);
+    },
+
     render: function () {
         var item = this.props.item;
         return (
@@ -40693,6 +40705,11 @@ var ListItem = React.createClass({displayName: "ListItem",
                     React.createElement("div", {className: "td"}, 
 
                             React.createElement("button", {type: "submit", onClick: this.handleSubmit, className: "btn btn-danger"}, "Remove")
+
+                    ), 
+                    React.createElement("div", {className: "td"}, 
+
+                            React.createElement("button", {type: "submit", onClick: this.handleSubmit, className: "btn btn-edit"}, "Edit")
 
                     )
 
@@ -40747,6 +40764,7 @@ var PriceList = React.createClass({displayName: "PriceList",
         ListItemStore.removeChangeListener(this.updateState);
     },
 
+
     render: function () {
         var items = this.state.list;
         return (
@@ -40779,10 +40797,10 @@ var Dispatcher = require('../dispatcher/Dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var objectAssign = require('object-assign');
 
-var shoppingList = [{"ItemName":"Beet","Price":6,"Id":6},{"ItemName":"Cabbage","Price":6,"Id":15},{"ItemName":"Green mix","Price":7,"Id":16},{"ItemName":"Eggs","Price":6,"Id":17}];
+var shoppingList = {6:{"ItemName":"Beet","Price":6,"Id":6},15:{"ItemName":"Cabbage","Price":6,"Id":15},16:{"ItemName":"Green mix","Price":7,"Id":16},17:{"ItemName":"Eggs","Price":6,"Id":17}};
 
 function addListItem(listItem) {
-    shoppingList[listItem.id] = listItem;
+    shoppingList[listItem.Id] = listItem;
 
     ListItemStore.emit('change');
 }
@@ -40820,6 +40838,8 @@ function handleAction(action) {
         addListItem(action.item);
     } else if (action.type === 'remove_list_item') {
         removeListItem(action.itemId);
+    } else if (action.type === 'edit_list_item') {
+            editListItem(action.itemId);
     } else if (action.type === 'remove_all_list_items') {
         removeAllListItems();
     }

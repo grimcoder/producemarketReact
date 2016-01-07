@@ -12,6 +12,14 @@ var ListItem = React.createClass({
         ListItemActionCreators.removeListItem(listItemId);
     },
 
+    handleEdit: function (event) {
+        event.preventDefault();
+
+        var listItemId = this.props.item.Id;
+
+        ListItemActionCreators.editListItem(listItemId);
+    },
+
     render: function () {
         var item = this.props.item;
         return (
@@ -32,6 +40,11 @@ var ListItem = React.createClass({
                     <div className="td">
 
                             <button type="submit" onClick={this.handleSubmit} className="btn btn-danger">Remove</button>
+
+                    </div>
+                    <div className="td">
+
+                            <button type="submit" onClick={this.handleSubmit} className="btn btn-edit">Edit</button>
 
                     </div>
 

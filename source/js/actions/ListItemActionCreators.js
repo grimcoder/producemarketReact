@@ -18,6 +18,15 @@ function removeListItem(itemId) {
     Dispatcher.dispatch(action);
 }
 
+function editListItem(itemId) {
+    var action = {
+        type: 'edit_list_item',
+        itemId: itemId
+    };
+
+    Dispatcher.dispatch(action);
+}
+
 function removeAllListItems() {
     var action = {
         type: 'remove_all_list_items'
@@ -29,5 +38,6 @@ function removeAllListItems() {
 module.exports = {
     addListItem: addListItem,
     removeListItem: removeListItem,
+    editListItem: editListItem,
     removeAllListItems: removeAllListItems
 };
