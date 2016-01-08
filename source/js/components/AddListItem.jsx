@@ -67,7 +67,7 @@ var styleRequired = {
 
     render: function () {
         var activeRecord = this.state.activeRecord;
-        var addeditbutton = !activeRecord.Id ? "Add" : "Edit";
+        var addeditbutton = !activeRecord.Id ? "Add" : "Save";
         var addeditTitle = !activeRecord.Id ? "Add New price" : "Edit price";
 
         return (
@@ -88,10 +88,7 @@ var styleRequired = {
                     </div>
                 </div>
 
-                <div className="form-group invisible">
-                    <label htmlFor="listItemDescription">Id</label>
-                    <input type="text" disabled className="form-control" rows="3" id="listItemDescription" placeholder="Enter description"  value={activeRecord.Id}  ref="Id"></input>
-                </div>
+
 
                 <hr />
 

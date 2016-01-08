@@ -8,8 +8,15 @@ var Application = React.createClass({
         return {activeTab: "PricesTab"};
     },
 
-    switchTab: function (tabName) {
-        this.setState({activeTab: tabName});
+    switchSales: function (event) {
+
+        this.setState({activeTab: 'SalesTab'});
+
+    },
+
+    switchPrices: function (event) {
+        var a = event;
+        this.setState({activeTab: 'PricesTab'});
 
     },
 
@@ -28,20 +35,21 @@ var Application = React.createClass({
 
             <div className="container">
 
-                <h2>
+                <div className="h2">
 
                     <span className="label label-warning" >
                         Produce market
                     </span>
 
-                    <div>
-                        <ul className="nav nav-pills">
+                    <button className="btn btn-primary" onClick={this.switchPrices} >Prices</button>
+                    <button className="btn btn-primary"  onClick={this.switchSales}>Sales</button>
+                    <button className="btn btn-primary"    >Reports</button>
 
-                        </ul>
-                    </div>
+                </div>
 
+                    <ul className="nav nav-pills">
 
-                </h2>
+                    </ul>
 
                 {activeTab}
 

@@ -49757,7 +49757,7 @@ var styleRequired = {
 
     render: function () {
         var activeRecord = this.state.activeRecord;
-        var addeditbutton = !activeRecord.Id ? "Add" : "Edit";
+        var addeditbutton = !activeRecord.Id ? "Add" : "Save";
         var addeditTitle = !activeRecord.Id ? "Add New price" : "Edit price";
 
         return (
@@ -49778,10 +49778,7 @@ var styleRequired = {
                     )
                 ), 
 
-                React.createElement("div", {className: "form-group invisible"}, 
-                    React.createElement("label", {htmlFor: "listItemDescription"}, "Id"), 
-                    React.createElement("input", {type: "text", disabled: true, className: "form-control", rows: "3", id: "listItemDescription", placeholder: "Enter description", value: activeRecord.Id, ref: "Id"})
-                ), 
+
 
                 React.createElement("hr", null), 
 
@@ -49805,8 +49802,15 @@ var Application = React.createClass({displayName: "Application",
         return {activeTab: "PricesTab"};
     },
 
-    switchTab: function (tabName) {
-        this.setState({activeTab: tabName});
+    switchSales: function (event) {
+
+        this.setState({activeTab: 'SalesTab'});
+
+    },
+
+    switchPrices: function (event) {
+        var a = event;
+        this.setState({activeTab: 'PricesTab'});
 
     },
 
@@ -49825,20 +49829,21 @@ var Application = React.createClass({displayName: "Application",
 
             React.createElement("div", {className: "container"}, 
 
-                React.createElement("h2", null, 
+                React.createElement("div", {className: "h2"}, 
 
                     React.createElement("span", {className: "label label-warning"}, 
                         "Produce market"
                     ), 
 
-                    React.createElement("div", null, 
-                        React.createElement("ul", {className: "nav nav-pills"}
-
-                        )
-                    )
-
+                    React.createElement("button", {className: "btn btn-primary", onClick: this.switchPrices}, "Prices"), 
+                    React.createElement("button", {className: "btn btn-primary", onClick: this.switchSales}, "Sales"), 
+                    React.createElement("button", {className: "btn btn-primary"}, "Reports")
 
                 ), 
+
+                    React.createElement("ul", {className: "nav nav-pills"}
+
+                    ), 
 
                 activeTab
 
@@ -49886,9 +49891,33 @@ var List = React.createClass({displayName: "List",
         return items ? Object.keys(items).length : [];
     },
 
+    getInitialState: function (){
+        return {searchText: ''};
+    },
+
+
+    getState: function(){
+        return {searchText: this.refs.search.value};
+    },
+
+
     createListItemElements: function (items) {
         var item;
-
+        if (this.state.searchText != '')
+        {
+            return (
+                this
+                    .getListOfItemIds(items).
+                    filter(function(itemId){
+                        return items[itemId].ItemName.toLowerCase().indexOf(this.state.searchText.toLowerCase()) > -1
+                    }.bind(this))
+                    .map(function createListItemElement(itemId) {
+                        item = items[itemId];
+                        return (React.createElement(ListItem, {item: item, handleRemoveListItem: this.props.removeListItem, key: item.Id}));
+                    }.bind(this))
+                    .reverse()
+            );
+        }
         return (
             this
                 .getListOfItemIds(items)
@@ -49900,42 +49929,58 @@ var List = React.createClass({displayName: "List",
         );
     },
 
+    handleChange : function(event){
+
+        this.setState(this.getState());
+    },
+
     render: function () {
         var items = this.props.items;
         var listItemElements = this.createListItemElements(items);
-
+        var searchText = this.state.searchText;
         return (
 
-            React.createElement("div", null, 
+            React.createElement("form", null, 
 
-                React.createElement("h3", {className: "page-header"}, 
-                    React.createElement(ListHeader, {totalNumberOfListItems: this.getTotalNumberOfListItems(items)})
-                ), 
+                React.createElement("div", null, 
 
 
-                    listItemElements.length > 0 ?
-                React.createElement("div", {className: "panel panel-primary"}, 
-                    React.createElement("div", {className: "panel-heading"}, "Prices"), 
-                    React.createElement("div", {className: "panel-body"}, 
-                        React.createElement("div", {className: "table"}, 
 
-                        React.createElement("div", {className: "tr "}, 
+                    React.createElement("h3", {className: "page-header"}, 
+                        React.createElement(ListHeader, {totalNumberOfListItems: this.getTotalNumberOfListItems(items)})
+                    ), 
+                    React.createElement("div", null, 
+                        React.createElement("input", {type: "text", className: "form-control", onChange: this.handleChange, id: "searchtext", placeholder: "Search", value: searchText, ref: "search"})
+                    ), 
+                        listItemElements.length > 0 ?
 
-                            React.createElement("div", {className: "td strong panel-header"}, "Name"), 
-                            React.createElement("div", {className: "td"}, "Price"), 
-                            React.createElement("div", {className: "td"}), 
-                            React.createElement("div", {className: "td"})
 
-                        ), 
 
-                        listItemElements
+                    React.createElement("div", {className: "panel panel-primary"}, 
 
+                            React.createElement("div", {className: "panel-heading"}, "Prices"), 
+                            React.createElement("div", {className: "panel-body"}, 
+                            React.createElement("div", {className: "table"}, 
+
+                            React.createElement("div", {className: "tr "}, 
+
+                                React.createElement("div", {className: "td strong panel-header"}, "Name"), 
+                                React.createElement("div", {className: "td"}, "Price"), 
+                                React.createElement("div", {className: "td"}), 
+                                React.createElement("div", {className: "td"})
+
+                            ), 
+
+                            listItemElements
+
+                        )
+                        )
                     )
-                    )
+
+                    : React.createElement(EmptyList, null)
+
+
                 )
-
-                : React.createElement(EmptyList, null)
-
 
             )
         );
@@ -49963,8 +50008,8 @@ var ListHeader = React.createClass({displayName: "ListHeader",
             return (
                 React.createElement("form", {onSubmit: this.handleSubmit, className: "form-inline"}, 
                     this.props.totalNumberOfListItems, " ", totalNumberOfListItems === 1 ? 'item' : 'items', 
-                    ' ', 
-                    React.createElement("button", {className: "btn btn-xs btn-default", type: "submit"}, "Remove all")
+                    ' '
+
                 )
             );
         }
@@ -50015,16 +50060,17 @@ var ListItem = React.createClass({displayName: "ListItem",
 
                 ), 
 
-                    React.createElement("div", {className: "td"}, 
+                React.createElement("div", {className: "td"}, 
 
-                            React.createElement("button", {type: "submit", onClick: this.handleSubmit, className: "btn btn-danger"}, "Remove")
+                        React.createElement("button", {type: "submit", onClick: this.handleSubmit, className: "btn btn-danger"}, "Remove")
 
-                    ), 
-                    React.createElement("div", {className: "td"}, 
+                ), 
 
-                            React.createElement("button", {type: "submit", onClick: this.handleEdit, className: "btn btn-primary"}, "Edit")
+                React.createElement("div", {className: "td"}, 
 
-                    )
+                        React.createElement("button", {type: "submit", onClick: this.handleEdit, className: "btn btn-primary"}, "Edit")
+
+                )
 
             )
         );
