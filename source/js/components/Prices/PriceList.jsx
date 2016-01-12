@@ -1,7 +1,7 @@
 var React = require('react');
 var List = require('./List.jsx');
 var AddListItem = require('./AddListItem.jsx');
-var ListItemStore = require('../stores/ListItemStore');
+var ListItemStore = require('../../stores/ListItemStore');
 var PriceList = React.createClass({
 
     getInitialState: function () {

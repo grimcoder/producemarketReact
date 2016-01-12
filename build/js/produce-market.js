@@ -5,7 +5,7 @@ var Application = require('./components/Application.jsx');
 
 ReactDOM.render(React.createElement(Application, null), document.querySelector('[data-react-application]'));
 
-},{"./components/Application.jsx":384,"react":381,"react-dom":225}],2:[function(require,module,exports){
+},{"./components/Application.jsx":383,"react":381,"react-dom":225}],2:[function(require,module,exports){
 
 },{}],3:[function(require,module,exports){
 (function (global){
@@ -49687,11 +49687,73 @@ module.exports = {
     resetActiveRecord : resetActiveRecord
 };
 
-},{"../dispatcher/Dispatcher":392}],383:[function(require,module,exports){
+},{"../dispatcher/Dispatcher":394}],383:[function(require,module,exports){
+var React = require('react');
+var PriceList = require('./Prices/PriceList.jsx');
+var SalesList  = require ('./Sales/SalesList.jsx');
+var Application = React.createClass({displayName: "Application",
+
+    getInitialState: function () {
+
+        return {activeTab: "PricesTab"};
+    },
+
+    switchSales: function (event) {
+
+        this.setState({activeTab: 'SalesTab'});
+
+    },
+
+    switchPrices: function (event) {
+        var a = event;
+        this.setState({activeTab: 'PricesTab'});
+
+    },
+
+    render: function () {
+        var activeTab;
+        if (this.state.activeTab == 'PricesTab')
+        {
+            activeTab =  React.createElement(PriceList, null);
+        }
+        else {
+            activeTab =  React.createElement(SalesList, null);
+        }
+
+        return (
+            React.createElement("div", {className: "container"}, 
+
+                React.createElement("div", {className: "h2"}, 
+
+                    React.createElement("span", {className: "label label-warning"}, 
+                        "Produce market"
+                    ), 
+
+                    React.createElement("button", {className: "btn btn-primary", onClick: this.switchPrices}, "Prices"), 
+                    React.createElement("button", {className: "btn btn-primary", onClick: this.switchSales}, "Sales"), 
+                    React.createElement("button", {className: "btn btn-primary"}, "Reports")
+
+                ), 
+
+                    React.createElement("ul", {className: "nav nav-pills"}
+
+                    ), 
+
+                activeTab
+
+            )
+
+        );
+    }
+});
+
+module.exports = Application;
+
+},{"./Prices/PriceList.jsx":390,"./Sales/SalesList.jsx":393,"react":381}],384:[function(require,module,exports){
 var React = require('react');
 var uuid = require('node-uuid');
-var ListItemActionCreators = require('../actions/ListItemActionCreators');
-var ListItemStore = require('../stores/ListItemStore');
+var ListItemActionCreators = require('../../actions/ListItemActionCreators');
+var ListItemStore = require('../../stores/ListItemStore');
 
 
 var styleRequired = {
@@ -49791,72 +49853,7 @@ var styleRequired = {
 
 module.exports = AddListItem;
 
-},{"../actions/ListItemActionCreators":382,"../stores/ListItemStore":393,"node-uuid":223,"react":381}],384:[function(require,module,exports){
-var React = require('react');
-var PriceList = require('./PriceList.jsx');
-var SalesList  = require ('./Sales/SalesList.jsx');
-var Application = React.createClass({displayName: "Application",
-
-    getInitialState: function () {
-
-        return {activeTab: "PricesTab"};
-    },
-
-    switchSales: function (event) {
-
-        this.setState({activeTab: 'SalesTab'});
-
-    },
-
-    switchPrices: function (event) {
-        var a = event;
-        this.setState({activeTab: 'PricesTab'});
-
-    },
-
-    render: function () {
-        var activeTab;
-        if (this.state.activeTab == 'PricesTab')
-        {
-            activeTab =  React.createElement(PriceList, null);
-        }
-        else {
-            
-            activeTab =  React.createElement(SalesList, null);
-        }
-
-        return (
-
-
-            React.createElement("div", {className: "container"}, 
-
-                React.createElement("div", {className: "h2"}, 
-
-                    React.createElement("span", {className: "label label-warning"}, 
-                        "Produce market"
-                    ), 
-
-                    React.createElement("button", {className: "btn btn-primary", onClick: this.switchPrices}, "Prices"), 
-                    React.createElement("button", {className: "btn btn-primary", onClick: this.switchSales}, "Sales"), 
-                    React.createElement("button", {className: "btn btn-primary"}, "Reports")
-
-                ), 
-
-                    React.createElement("ul", {className: "nav nav-pills"}
-
-                    ), 
-
-                activeTab
-
-            )
-
-        );
-    }
-});
-
-module.exports = Application;
-
-},{"./PriceList.jsx":390,"./Sales/SalesList.jsx":391,"react":381}],385:[function(require,module,exports){
+},{"../../actions/ListItemActionCreators":382,"../../stores/ListItemStore":395,"node-uuid":223,"react":381}],385:[function(require,module,exports){
 var React = require('react');
 
 var EmptyList = React.createClass({displayName: "EmptyList",
@@ -49992,7 +49989,7 @@ module.exports = List;
 
 },{"./EmptyList.jsx":385,"./ListHeader.jsx":387,"./ListItem.jsx":388,"react":381}],387:[function(require,module,exports){
 var React = require('react');
-var ListItemActionCreators = require('../actions/ListItemActionCreators');
+var ListItemActionCreators = require('../../actions/ListItemActionCreators');
 
 var ListHeader = React.createClass({displayName: "ListHeader",
 
@@ -50016,10 +50013,10 @@ var ListHeader = React.createClass({displayName: "ListHeader",
 
 module.exports = ListHeader;
 
-},{"../actions/ListItemActionCreators":382,"react":381}],388:[function(require,module,exports){
+},{"../../actions/ListItemActionCreators":382,"react":381}],388:[function(require,module,exports){
 var React = require('react');
 var ListItemDescription = require('./ListItemDescription.jsx');
-var ListItemActionCreators = require('../actions/ListItemActionCreators');
+var ListItemActionCreators = require('../../actions/ListItemActionCreators');
 
 var ListItem = React.createClass({displayName: "ListItem",
 
@@ -50075,7 +50072,7 @@ var ListItem = React.createClass({displayName: "ListItem",
 
 module.exports = ListItem;
 
-},{"../actions/ListItemActionCreators":382,"./ListItemDescription.jsx":389,"react":381}],389:[function(require,module,exports){
+},{"../../actions/ListItemActionCreators":382,"./ListItemDescription.jsx":389,"react":381}],389:[function(require,module,exports){
 var React = require('react');
 
 var ListItemDescription = React.createClass({displayName: "ListItemDescription",
@@ -50094,7 +50091,7 @@ module.exports = ListItemDescription;
 var React = require('react');
 var List = require('./List.jsx');
 var AddListItem = require('./AddListItem.jsx');
-var ListItemStore = require('../stores/ListItemStore');
+var ListItemStore = require('../../stores/ListItemStore');
 var PriceList = React.createClass({displayName: "PriceList",
 
     getInitialState: function () {
@@ -50142,11 +50139,114 @@ var PriceList = React.createClass({displayName: "PriceList",
 
 module.exports = PriceList;
 
-},{"../stores/ListItemStore":393,"./AddListItem.jsx":383,"./List.jsx":386,"react":381}],391:[function(require,module,exports){
+},{"../../stores/ListItemStore":395,"./AddListItem.jsx":384,"./List.jsx":386,"react":381}],391:[function(require,module,exports){
 var React = require('react');
-//var List = require('./Sales.jsx');
 
-var SalesList = React.createClass({displayName: "SalesList",
+var ListItemActionCreators = require('../../actions/ListItemActionCreators');
+var ListItemStore = require('../../stores/ListItemStore');
+
+
+var styleRequired = {
+    color: "#ffaaaa"
+};
+
+    var AddListItem = React.createClass({displayName: "AddListItem",
+    handleChange : function(event){
+        var id = this.state.activeRecord.Id;
+        var item = {
+            Id: id,
+            date: new Date(),
+            ItemName: this.refs.ItemName.value,
+            Price: this.refs.Price.value
+        };
+
+        //this.setState({});
+
+        this.setState({activeRecord: item});
+
+    },
+
+    resetForm : function(){
+        ListItemActionCreators.resetActiveRecord();
+    },
+
+    handleSubmitEvent: function (event){
+
+        event.preventDefault();
+
+        ListItemActionCreators.addListItem(this.state.activeRecord);
+        ListItemActionCreators.resetActiveRecord();
+
+    },
+
+    getInitialState: function (){
+        return this.getActiveRecord();
+    },
+
+    updateState: function () {
+        this.setState(this.getActiveRecord());
+    },
+
+    getActiveRecord: function () {
+        return {
+
+            activeRecord: ListItemStore.getActiveRecord(),
+
+            'addeditbutton': "Add to list"
+
+        };
+    },
+
+    componentDidMount: function () {
+        ListItemStore.addChangeListener(this.updateState);
+    },
+
+    componentWillUnmount: function () {
+        ListItemStore.removeChangeListener(this.updateState);
+    },
+
+    render: function () {
+        var activeRecord = this.state.activeRecord;
+        var addeditbutton = !activeRecord.Id ? "Add" : "Save";
+        var addeditTitle = !activeRecord.Id ? "Add New sale" : "Edit sale   ";
+
+        return (
+            React.createElement("form", {onSubmit: this.handleSubmitEvent}, 
+                React.createElement("h3", {className: "page-header"}, addeditTitle), 
+
+                React.createElement("div", {className: "form-group"}, 
+                    React.createElement("label", {htmlFor: "listItemName"}, "Name ", React.createElement("span", {style: styleRequired}, "*")), 
+                    React.createElement("input", {type: "text", className: "form-control", id: "listItemName", placeholder: "Enter name", onChange: this.handleChange, required: true, ref: "ItemName", value: activeRecord.ItemName})
+                ), 
+
+                React.createElement("div", {className: "form-group"}, 
+                    React.createElement("label", {htmlFor: "listItemQuantity"}, "Price ", React.createElement("span", {style: styleRequired}, "*")), 
+                    React.createElement("div", {className: "row"}, 
+                        React.createElement("div", {className: "col-xs-5 col-sm-6 col-md-4"}, 
+                            React.createElement("input", {type: "number", min: "1", max: "9999", step: "1", defaultValue: "1", className: "form-control", onChange: this.handleChange, id: "listItemQuantity", value: activeRecord.Price, required: true, ref: "Price"})
+                        )
+                    )
+                ), 
+
+
+
+                React.createElement("hr", null), 
+
+                React.createElement("button", {type: "submit", className: "btn btn-primary"}, addeditbutton), 
+                React.createElement("button", {type: "reset", onClick: this.resetForm, className: "btn btn-link"}, "Cancel")
+            )
+        );
+    }
+});
+
+module.exports = AddListItem;
+
+},{"../../actions/ListItemActionCreators":382,"../../stores/ListItemStore":395,"react":381}],392:[function(require,module,exports){
+var React = require('react');
+var ListHeader = require('./../Prices/ListHeader.jsx');
+
+
+var Sales = React.createClass({displayName: "Sales",
 
 
     render: function () {
@@ -50154,7 +50254,49 @@ var SalesList = React.createClass({displayName: "SalesList",
         return(
             React.createElement("div", null, 
 
-                    "ss"
+                React.createElement("h3", {className: "page-header"}, 
+                    React.createElement(ListHeader, {title: "Sales", totalNumberOfListItems: 8})
+                )
+
+            )
+        );
+
+    }
+
+});
+
+module.exports = Sales;
+
+},{"./../Prices/ListHeader.jsx":387,"react":381}],393:[function(require,module,exports){
+var React = require('react');
+var List = require('./Sales.jsx');
+var AddListItem = require('./AddListItem.jsx')
+var SalesList = React.createClass({displayName: "SalesList",
+
+    getInitialState: function(){
+      return {list : {}}
+    },
+    render: function () {
+        var items = this.state.list;
+
+        return(
+            React.createElement("div", null, 
+
+
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {className: "col-sm-6"}, 
+
+                        React.createElement(List, {items: items})
+
+                    ), 
+                    React.createElement("div", {className: "col-sm-6"}, 
+
+                        React.createElement(AddListItem, null)
+
+                    )
+                )
+
+
 
             )
         );
@@ -50163,11 +50305,11 @@ var SalesList = React.createClass({displayName: "SalesList",
 
 module.exports = SalesList;
 
-},{"react":381}],392:[function(require,module,exports){
+},{"./AddListItem.jsx":391,"./Sales.jsx":392,"react":381}],394:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;
 module.exports = new Dispatcher();
 
-},{"flux":219}],393:[function(require,module,exports){
+},{"flux":219}],395:[function(require,module,exports){
 var Dispatcher = require('../dispatcher/Dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var objectAssign = require('object-assign');
@@ -50179,10 +50321,10 @@ var shoppingList = {};
 var activeRecord = {};
 
 function addListItem(listItem) {
-    shoppingList[listItem.Id] = listItem;
+    //shoppingList[listItem.Id] = listItem;
 
     $.post(apiHost + "/api/prices", listItem, function() {
-        ListItemStore.emit('pricesRecieved',shoppingList);
+        ListItemStore.getAllListItems();
     });
 }
 
@@ -50276,4 +50418,4 @@ ListItemStore.dispatchToken = Dispatcher.register(handleAction);
 module.exports = ListItemStore;
 
 
-},{"../dispatcher/Dispatcher":392,"events":199,"jquery":222,"object-assign":224}]},{},[1]);
+},{"../dispatcher/Dispatcher":394,"events":199,"jquery":222,"object-assign":224}]},{},[1]);

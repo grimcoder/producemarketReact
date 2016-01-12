@@ -1,7 +1,7 @@
 var React = require('react');
 var uuid = require('node-uuid');
-var ListItemActionCreators = require('../actions/ListItemActionCreators');
-var ListItemStore = require('../stores/ListItemStore');
+var ListItemActionCreators = require('../../actions/ListItemActionCreators');
+var ListItemStore = require('../../stores/ListItemStore');
 
 
 var styleRequired = {

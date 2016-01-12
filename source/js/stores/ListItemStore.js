@@ -9,10 +9,10 @@ var shoppingList = {};
 var activeRecord = {};
 
 function addListItem(listItem) {
-    shoppingList[listItem.Id] = listItem;
+    //shoppingList[listItem.Id] = listItem;
 
     $.post(apiHost + "/api/prices", listItem, function() {
-        ListItemStore.emit('pricesRecieved',shoppingList);
+        ListItemStore.getAllListItems();
     });
 }
 

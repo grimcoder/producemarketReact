@@ -1,6 +1,6 @@
 var React = require('react');
 var ListItemDescription = require('./ListItemDescription.jsx');
-var ListItemActionCreators = require('../actions/ListItemActionCreators');
+var ListItemActionCreators = require('../../actions/ListItemActionCreators');
 
 var ListItem = React.createClass({
 

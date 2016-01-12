@@ -1,5 +1,5 @@
 var React = require('react');
-var ListItemActionCreators = require('../actions/ListItemActionCreators');
+var ListItemActionCreators = require('../../actions/ListItemActionCreators');
 
 var ListHeader = React.createClass({
 

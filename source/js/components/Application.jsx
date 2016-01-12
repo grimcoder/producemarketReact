@@ -1,5 +1,5 @@
 var React = require('react');
-var PriceList = require('./PriceList.jsx');
+var PriceList = require('./Prices/PriceList.jsx');
 var SalesList  = require ('./Sales/SalesList.jsx');
 var Application = React.createClass({
 
@@ -27,13 +27,10 @@ var Application = React.createClass({
             activeTab =  <PriceList />;
         }
         else {
-
             activeTab =  <SalesList />;
         }
 
         return (
-
-
             <div className="container">
 
                 <div className="h2">

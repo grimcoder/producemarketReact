@@ -1,5 +1,5 @@
 var React = require('react');
-var ListHeader = require('./../ListHeader.jsx');
+var ListHeader = require('./../Prices/ListHeader.jsx');
 
 
 var Sales = React.createClass({
@@ -11,7 +11,7 @@ var Sales = React.createClass({
             <div>
 
                 <h3 className="page-header">
-                    <ListHeader title='Sales' totalNumberOfListItems={this.getTotalNumberOfListItems(items)} />
+                    <ListHeader title='Sales' totalNumberOfListItems={8} />
                 </h3>
 
             </div>
