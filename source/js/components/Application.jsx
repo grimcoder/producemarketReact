@@ -1,6 +1,6 @@
 var React = require('react');
 var PriceList = require('./PriceList.jsx');
-var Sales  = require ('./Sales/Sales.jsx');
+var SalesList  = require ('./Sales/SalesList.jsx');
 var Application = React.createClass({
 
     getInitialState: function () {
@@ -27,7 +27,8 @@ var Application = React.createClass({
             activeTab =  <PriceList />;
         }
         else {
-            activeTab =  <Sales />;
+
+            activeTab =  <SalesList />;
         }
 
         return (

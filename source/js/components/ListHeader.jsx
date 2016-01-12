@@ -3,26 +3,21 @@ var ListItemActionCreators = require('../actions/ListItemActionCreators');
 
 var ListHeader = React.createClass({
 
-    handleSubmit: function (event) {
-        event.preventDefault();
-
-        ListItemActionCreators.removeAllListItems();
-    },
-
     render: function () {
+
         var totalNumberOfListItems = this.props.totalNumberOfListItems;
 
         if (totalNumberOfListItems > 0) {
             return (
-                <form onSubmit={this.handleSubmit} className="form-inline">
+                <div >
                     {this.props.totalNumberOfListItems} {totalNumberOfListItems === 1 ? 'item' : 'items'}
                     {' '}
 
-                </form>
+                </div>
             );
         }
 
-        return (<span>Price List</span>);
+        return (<span>{this.props.title}</span>);
     }
 });
 

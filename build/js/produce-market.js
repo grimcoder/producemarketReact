@@ -49794,7 +49794,7 @@ module.exports = AddListItem;
 },{"../actions/ListItemActionCreators":382,"../stores/ListItemStore":393,"node-uuid":223,"react":381}],384:[function(require,module,exports){
 var React = require('react');
 var PriceList = require('./PriceList.jsx');
-var Sales  = require ('./Sales/Sales.jsx');
+var SalesList  = require ('./Sales/SalesList.jsx');
 var Application = React.createClass({displayName: "Application",
 
     getInitialState: function () {
@@ -49821,7 +49821,8 @@ var Application = React.createClass({displayName: "Application",
             activeTab =  React.createElement(PriceList, null);
         }
         else {
-            activeTab =  React.createElement(Sales, null);
+            
+            activeTab =  React.createElement(SalesList, null);
         }
 
         return (
@@ -49855,7 +49856,7 @@ var Application = React.createClass({displayName: "Application",
 
 module.exports = Application;
 
-},{"./PriceList.jsx":390,"./Sales/Sales.jsx":391,"react":381}],385:[function(require,module,exports){
+},{"./PriceList.jsx":390,"./Sales/SalesList.jsx":391,"react":381}],385:[function(require,module,exports){
 var React = require('react');
 
 var EmptyList = React.createClass({displayName: "EmptyList",
@@ -49947,10 +49948,10 @@ var List = React.createClass({displayName: "List",
 
 
                     React.createElement("h3", {className: "page-header"}, 
-                        React.createElement(ListHeader, {totalNumberOfListItems: this.getTotalNumberOfListItems(items)})
+                        React.createElement(ListHeader, {title: "Prices", totalNumberOfListItems: this.getTotalNumberOfListItems(items)})
                     ), 
                     React.createElement("div", null, 
-                        React.createElement("input", {type: "text", className: "form-control", onChange: this.handleChange, id: "searchtext", placeholder: "Search", value: searchText, ref: "search"})
+                        React.createElement("input", {type: "text", className: "form-control searchbox", onChange: this.handleChange, id: "searchtext", placeholder: "Search", value: searchText, ref: "search"})
                     ), 
                         listItemElements.length > 0 ?
 
@@ -49995,18 +49996,13 @@ var ListItemActionCreators = require('../actions/ListItemActionCreators');
 
 var ListHeader = React.createClass({displayName: "ListHeader",
 
-    handleSubmit: function (event) {
-        event.preventDefault();
-
-        ListItemActionCreators.removeAllListItems();
-    },
-
     render: function () {
+
         var totalNumberOfListItems = this.props.totalNumberOfListItems;
 
         if (totalNumberOfListItems > 0) {
             return (
-                React.createElement("form", {onSubmit: this.handleSubmit, className: "form-inline"}, 
+                React.createElement("div", null, 
                     this.props.totalNumberOfListItems, " ", totalNumberOfListItems === 1 ? 'item' : 'items', 
                     ' '
 
@@ -50014,7 +50010,7 @@ var ListHeader = React.createClass({displayName: "ListHeader",
             );
         }
 
-        return (React.createElement("span", null, "Price List"));
+        return (React.createElement("span", null, this.props.title));
     }
 });
 
@@ -50148,27 +50144,24 @@ module.exports = PriceList;
 
 },{"../stores/ListItemStore":393,"./AddListItem.jsx":383,"./List.jsx":386,"react":381}],391:[function(require,module,exports){
 var React = require('react');
+//var List = require('./Sales.jsx');
 
-var Sales = React.createClass({displayName: "Sales",
+var SalesList = React.createClass({displayName: "SalesList",
 
 
     render: function () {
 
         return(
-
             React.createElement("div", null, 
-                "Sales"
+
+                    "ss"
+
             )
-
-
-
         );
-
     }
-
 });
 
-module.exports = Sales;
+module.exports = SalesList;
 
 },{"react":381}],392:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;

@@ -74,10 +74,10 @@ var List = React.createClass({
 
 
                     <h3 className="page-header">
-                        <ListHeader totalNumberOfListItems={this.getTotalNumberOfListItems(items)} />
+                        <ListHeader title='Prices' totalNumberOfListItems={this.getTotalNumberOfListItems(items)} />
                     </h3>
                     <div>
-                        <input type="text" className="form-control" onChange={this.handleChange} id="searchtext" placeholder="Search"  value={searchText}  ref="search" />
+                        <input type="text" className="form-control searchbox" onChange={this.handleChange} id="searchtext" placeholder="Search"  value={searchText}  ref="search" />
                     </div>
                         {listItemElements.length > 0 ?
 
