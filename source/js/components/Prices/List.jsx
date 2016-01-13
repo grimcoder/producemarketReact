@@ -1,7 +1,7 @@
 var React = require('react');
 var ListItem = require('./ListItem.jsx');
 var ListHeader = require('./ListHeader.jsx');
-var EmptyList = require('./EmptyList.jsx');
+var EmptyList = require('./../common/EmptyList.jsx');
 
 var List = React.createClass({
 
@@ -56,7 +56,7 @@ var List = React.createClass({
         );
     },
 
-    handleChange : function(event){
+    handleSearch : function(event){
 
         this.setState(this.getState());
     },
@@ -77,7 +77,7 @@ var List = React.createClass({
                         <ListHeader title='Prices' totalNumberOfListItems={this.getTotalNumberOfListItems(items)} />
                     </h3>
                     <div>
-                        <input type="text" className="form-control searchbox" onChange={this.handleChange} id="searchtext" placeholder="Search"  value={searchText}  ref="search" />
+                        <input type="text" className="form-control searchbox" onChange={this.handleSearch} id="searchtext" placeholder="Search"  value={searchText}  ref="search" />
                     </div>
                         {listItemElements.length > 0 ?
 

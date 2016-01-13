@@ -11,7 +11,7 @@ var activeRecord = {};
 function addListItem(listItem) {
     //shoppingList[listItem.Id] = listItem;
 
-    $.post(apiHost + "/api/prices", listItem, function() {
+    $.post(apiHost + "/api/prices", listItem, function(){
         ListItemStore.getAllListItems();
     });
 }
@@ -27,6 +27,8 @@ function removeListItem(listItemId) {
             // Do something with the result
         }
     });
+
+
 
     ListItemStore.emit('pricesRecieved',shoppingList);
 }
@@ -50,7 +52,6 @@ function removeAllListItems() {
 
     ListItemStore.emit('change');
 }
-
 var ListItemStore = objectAssign({}, EventEmitter.prototype, {
 
         getAllListItems: function () {

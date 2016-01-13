@@ -47,10 +47,22 @@ function resetActiveRecord() {
 
 
 
+
+function getAllSalesList() {
+    var action = {
+        type: 'get_sales_list'
+    };
+
+    Dispatcher.dispatch(action);
+}
+
+
+
 module.exports = {
     addListItem: addListItem,
     removeListItem: removeListItem,
     editListItem: editListItem,
     removeAllListItems: removeAllListItems,
-    resetActiveRecord : resetActiveRecord
+    resetActiveRecord : resetActiveRecord,
+    getAllSalesList: getAllSalesList
 };

@@ -13276,7 +13276,8 @@ module.exports={
     }
   ],
   "directories": {},
-  "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.0.2.tgz"
+  "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.0.2.tgz",
+  "readme": "ERROR: No README data found!"
 }
 
 },{}],66:[function(require,module,exports){
@@ -14720,13 +14721,8 @@ DERNode.prototype._decodeObjid = function decodeObjid(buffer, values, relative) 
   else
     result = [first, second].concat(identifiers.slice(1));
 
-  if (values) {
-    var tmp = values[result.join(' ')];
-    if (tmp === undefined)
-      tmp = values[result.join('.')];
-    if (tmp !== undefined)
-      result = tmp;
-  }
+  if (values)
+    result = values[result.join(' ')];
 
   return result;
 };
@@ -49683,15 +49679,27 @@ function resetActiveRecord() {
 
 
 
+
+function getAllSalesList() {
+    var action = {
+        type: 'get_sales_list'
+    };
+
+    Dispatcher.dispatch(action);
+}
+
+
+
 module.exports = {
     addListItem: addListItem,
     removeListItem: removeListItem,
     editListItem: editListItem,
     removeAllListItems: removeAllListItems,
-    resetActiveRecord : resetActiveRecord
+    resetActiveRecord : resetActiveRecord,
+    getAllSalesList: getAllSalesList
 };
 
-},{"../dispatcher/Dispatcher":394}],383:[function(require,module,exports){
+},{"../dispatcher/Dispatcher":395}],383:[function(require,module,exports){
 var React = require('react');
 var PriceList = require('./Prices/PriceList.jsx');
 var SalesList  = require ('./Sales/SalesList.jsx');
@@ -49753,19 +49761,17 @@ var Application = React.createClass({displayName: "Application",
 
 module.exports = Application;
 
-},{"./Prices/PriceList.jsx":390,"./Sales/SalesList.jsx":393,"react":381}],384:[function(require,module,exports){
+},{"./Prices/PriceList.jsx":389,"./Sales/SalesList.jsx":393,"react":381}],384:[function(require,module,exports){
 var React = require('react');
 var uuid = require('node-uuid');
 var ListItemActionCreators = require('../../actions/ListItemActionCreators');
 var ListItemStore = require('../../stores/ListItemStore');
-
 
 var styleRequired = {
     color: "#ffaaaa"
 };
 
     var AddListItem = React.createClass({displayName: "AddListItem",
-
 
     handleChange : function(event){
         var id = this.state.activeRecord.Id;
@@ -49775,8 +49781,6 @@ var styleRequired = {
             ItemName: this.refs.ItemName.value,
             Price: this.refs.Price.value
         };
-
-        //this.setState({});
 
         this.setState({activeRecord: item});
 
@@ -49857,26 +49861,11 @@ var styleRequired = {
 
 module.exports = AddListItem;
 
-},{"../../actions/ListItemActionCreators":382,"../../stores/ListItemStore":395,"node-uuid":223,"react":381}],385:[function(require,module,exports){
-var React = require('react');
-
-var EmptyList = React.createClass({displayName: "EmptyList",
-    render: function () {
-        return (
-            React.createElement("div", null, 
-                "There are no items in your list."
-            )
-        );
-    }
-});
-
-module.exports = EmptyList;
-
-},{"react":381}],386:[function(require,module,exports){
+},{"../../actions/ListItemActionCreators":382,"../../stores/ListItemStore":396,"node-uuid":223,"react":381}],385:[function(require,module,exports){
 var React = require('react');
 var ListItem = require('./ListItem.jsx');
 var ListHeader = require('./ListHeader.jsx');
-var EmptyList = require('./EmptyList.jsx');
+var EmptyList = require('./../common/EmptyList.jsx');
 
 var List = React.createClass({displayName: "List",
 
@@ -49931,7 +49920,7 @@ var List = React.createClass({displayName: "List",
         );
     },
 
-    handleChange : function(event){
+    handleSearch : function(event){
 
         this.setState(this.getState());
     },
@@ -49952,7 +49941,7 @@ var List = React.createClass({displayName: "List",
                         React.createElement(ListHeader, {title: "Prices", totalNumberOfListItems: this.getTotalNumberOfListItems(items)})
                     ), 
                     React.createElement("div", null, 
-                        React.createElement("input", {type: "text", className: "form-control searchbox", onChange: this.handleChange, id: "searchtext", placeholder: "Search", value: searchText, ref: "search"})
+                        React.createElement("input", {type: "text", className: "form-control searchbox", onChange: this.handleSearch, id: "searchtext", placeholder: "Search", value: searchText, ref: "search"})
                     ), 
                         listItemElements.length > 0 ?
 
@@ -49991,7 +49980,7 @@ var List = React.createClass({displayName: "List",
 
 module.exports = List;
 
-},{"./EmptyList.jsx":385,"./ListHeader.jsx":387,"./ListItem.jsx":388,"react":381}],387:[function(require,module,exports){
+},{"./../common/EmptyList.jsx":394,"./ListHeader.jsx":386,"./ListItem.jsx":387,"react":381}],386:[function(require,module,exports){
 var React = require('react');
 var ListItemActionCreators = require('../../actions/ListItemActionCreators');
 
@@ -50017,7 +50006,7 @@ var ListHeader = React.createClass({displayName: "ListHeader",
 
 module.exports = ListHeader;
 
-},{"../../actions/ListItemActionCreators":382,"react":381}],388:[function(require,module,exports){
+},{"../../actions/ListItemActionCreators":382,"react":381}],387:[function(require,module,exports){
 var React = require('react');
 var ListItemDescription = require('./ListItemDescription.jsx');
 var ListItemActionCreators = require('../../actions/ListItemActionCreators');
@@ -50076,7 +50065,7 @@ var ListItem = React.createClass({displayName: "ListItem",
 
 module.exports = ListItem;
 
-},{"../../actions/ListItemActionCreators":382,"./ListItemDescription.jsx":389,"react":381}],389:[function(require,module,exports){
+},{"../../actions/ListItemActionCreators":382,"./ListItemDescription.jsx":388,"react":381}],388:[function(require,module,exports){
 var React = require('react');
 
 var ListItemDescription = React.createClass({displayName: "ListItemDescription",
@@ -50091,7 +50080,7 @@ var ListItemDescription = React.createClass({displayName: "ListItemDescription",
 
 module.exports = ListItemDescription;
 
-},{"react":381}],390:[function(require,module,exports){
+},{"react":381}],389:[function(require,module,exports){
 var React = require('react');
 var List = require('./List.jsx');
 var AddListItem = require('./AddListItem.jsx');
@@ -50143,7 +50132,7 @@ var PriceList = React.createClass({displayName: "PriceList",
 
 module.exports = PriceList;
 
-},{"../../stores/ListItemStore":395,"./AddListItem.jsx":384,"./List.jsx":386,"react":381}],391:[function(require,module,exports){
+},{"../../stores/ListItemStore":396,"./AddListItem.jsx":384,"./List.jsx":385,"react":381}],390:[function(require,module,exports){
 var React = require('react');
 
 var ListItemActionCreators = require('../../actions/ListItemActionCreators');
@@ -50245,18 +50234,83 @@ var styleRequired = {
 
 module.exports = AddListItem;
 
-},{"../../actions/ListItemActionCreators":382,"../../stores/ListItemStore":395,"react":381}],392:[function(require,module,exports){
+},{"../../actions/ListItemActionCreators":382,"../../stores/ListItemStore":396,"react":381}],391:[function(require,module,exports){
+var React = require('react');
+//var ListItemDescription = require('./ListItemDescription.jsx');
+var ListItemActionCreators = require('../../actions/ListItemActionCreators');
+
+
+var ListItem = React.createClass({displayName: "ListItem",
+
+    handleSubmit: function (event) {
+        event.preventDefault();
+
+        var listItemId = this.props.item.Id;
+
+        ListItemActionCreators.removeListItem(listItemId);
+    },
+
+    handleEdit: function (event) {
+        event.preventDefault();
+
+        var listItemId = this.props.item.Id;
+
+        ListItemActionCreators.editListItem(listItemId);
+    },
+
+    render: function () {
+        var item = this.props.item;
+        return (
+            React.createElement("div", {className: "panel panel-primary tr"}
+
+
+
+            )
+        );
+    }
+});
+
+module.exports = ListItem;
+
+},{"../../actions/ListItemActionCreators":382,"react":381}],392:[function(require,module,exports){
 var React = require('react');
 var ListHeader = require('./../Prices/ListHeader.jsx');
-
+var EmptyList = require('./../common/EmptyList.jsx');
+var ListItem = require('./ListItem.jsx');
 
 var Sales = React.createClass({displayName: "Sales",
+
+    getInitialState: function(){
+        return {searchText: ''};
+    },
 
     getItemsCount : function(){
         return this.props.items.length
     },
 
+    getState: function(){
+        return {searchText: this.refs.search.value};
+    },
+
+    //handleSearch : function(event){
+    //
+    //    this.setState(this.getState());
+    //},
+
+    createListItemElements: function(items){
+
+        return (
+            items.map(function (item) {
+                    return (React.createElement(ListItem, {item: item, key: item.Id}));
+                })
+                .reverse()
+        );
+
+    },
+
     render: function () {
+        //var searchText = this.state.searchText
+        var listItemElements = this.createListItemElements(this.props.items);
 
         return(
             React.createElement("div", null, 
@@ -50265,7 +50319,32 @@ var Sales = React.createClass({displayName: "Sales",
 
                     React.createElement(ListHeader, {title: "Sales", totalNumberOfListItems: this.getItemsCount()})
 
-                )
+                ), 
+
+                this.props.items > 0 ?
+
+                    React.createElement("div", {className: "panel panel-primary"}, 
+
+                        React.createElement("div", {className: "panel-heading"}, "Prices"), 
+                        React.createElement("div", {className: "panel-body"}, 
+                            React.createElement("div", {className: "table"}, 
+
+                                React.createElement("div", {className: "tr "}, 
+
+                                    React.createElement("div", {className: "td strong panel-header"}, "Name"), 
+                                    React.createElement("div", {className: "td"}, "Price"), 
+                                    React.createElement("div", {className: "td"}), 
+                                    React.createElement("div", {className: "td"})
+
+                                ), 
+
+                                listItemElements
+
+                            )
+                        )
+                    )
+
+                    : React.createElement(EmptyList, null)
 
             )
         );
@@ -50276,19 +50355,35 @@ var Sales = React.createClass({displayName: "Sales",
 
 module.exports = Sales;
 
-},{"./../Prices/ListHeader.jsx":387,"react":381}],393:[function(require,module,exports){
+},{"./../Prices/ListHeader.jsx":386,"./../common/EmptyList.jsx":394,"./ListItem.jsx":391,"react":381}],393:[function(require,module,exports){
 var React = require('react');
-var List = require('./Sales.jsx');
+var Sales = require('./Sales.jsx');
 var AddListItem = require('./AddListItem.jsx')
 var SalesStore = require('./../../stores/SalesStore')
+var ActionCreators = require('../../actions/ListItemActionCreators');
 
 var SalesList = React.createClass({displayName: "SalesList",
 
     getInitialState: function(){
-        //SalesStore.
+        ActionCreators.getAllSalesList();
+        return {saleslist: []}
     },
+
+    updateState(state){
+      this.setState({saleslist: state})
+    },
+
+    componentDidMount: function () {
+        SalesStore.addGetSalesListListener(this.updateState);
+    },
+
+    componentWillUnmount: function () {
+        SalesStore.removeGetSalesListListener(this.updateState);
+    },
+
+
     render: function () {
-        var items = this.state.list;
+        var items = this.state.saleslist;
 
         return(
             React.createElement("div", null, 
@@ -50297,7 +50392,7 @@ var SalesList = React.createClass({displayName: "SalesList",
                 React.createElement("div", {className: "row"}, 
                     React.createElement("div", {className: "col-sm-6"}, 
 
-                        React.createElement(List, {items: items})
+                        React.createElement(Sales, {items: items})
 
                     ), 
                     React.createElement("div", {className: "col-sm-6"}, 
@@ -50316,11 +50411,26 @@ var SalesList = React.createClass({displayName: "SalesList",
 
 module.exports = SalesList;
 
-},{"./../../stores/SalesStore":396,"./AddListItem.jsx":391,"./Sales.jsx":392,"react":381}],394:[function(require,module,exports){
+},{"../../actions/ListItemActionCreators":382,"./../../stores/SalesStore":397,"./AddListItem.jsx":390,"./Sales.jsx":392,"react":381}],394:[function(require,module,exports){
+var React = require('react');
+
+var EmptyList = React.createClass({displayName: "EmptyList",
+    render: function () {
+        return (
+            React.createElement("div", null, 
+                "There are no items in your list."
+            )
+        );
+    }
+});
+
+module.exports = EmptyList;
+
+},{"react":381}],395:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;
 module.exports = new Dispatcher();
 
-},{"flux":219}],395:[function(require,module,exports){
+},{"flux":219}],396:[function(require,module,exports){
 var Dispatcher = require('../dispatcher/Dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var objectAssign = require('object-assign');
@@ -50334,7 +50444,7 @@ var activeRecord = {};
 function addListItem(listItem) {
     //shoppingList[listItem.Id] = listItem;
 
-    $.post(apiHost + "/api/prices", listItem, function() {
+    $.post(apiHost + "/api/prices", listItem, function(){
         ListItemStore.getAllListItems();
     });
 }
@@ -50350,6 +50460,8 @@ function removeListItem(listItemId) {
             // Do something with the result
         }
     });
+
+
 
     ListItemStore.emit('pricesRecieved',shoppingList);
 }
@@ -50373,7 +50485,6 @@ function removeAllListItems() {
 
     ListItemStore.emit('change');
 }
-
 var ListItemStore = objectAssign({}, EventEmitter.prototype, {
 
         getAllListItems: function () {
@@ -50429,12 +50540,12 @@ ListItemStore.dispatchToken = Dispatcher.register(handleAction);
 module.exports = ListItemStore;
 
 
-},{"../dispatcher/Dispatcher":394,"events":199,"jquery":222,"object-assign":224}],396:[function(require,module,exports){
+},{"../dispatcher/Dispatcher":395,"events":199,"jquery":222,"object-assign":224}],397:[function(require,module,exports){
 var Dispatcher = require('../dispatcher/Dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var objectAssign = require('object-assign');
 
-var shoppingList = {};
+var salesList = {};
 var activeRecord = {};
 
 var $ = require('jquery');
@@ -50443,17 +50554,30 @@ var apiHost = "http://" + 'taraskovtun.com' + ":3001";
 var Salestore = objectAssign({}, EventEmitter.prototype, {
 
     getAllListItems: function () {
-        $.get(apiHost + '/api/prices', function(result) {
+        $.get(apiHost + '/api/sales', function(result) {
 
-            result.map(function(item){
-                shoppingList[item.Id] = item;
-            });
-
-            ListItemStore.emit('salesReceivedFromAPI',shoppingList);
+            Salestore.emit('salesReceivedFromAPI',result);
 
         }.bind(this));
+    },
+
+    addGetSalesListListener: function (changeEventHandler) {
+        this.on('salesReceivedFromAPI', changeEventHandler);
+    },
+
+    removeGetSalesListListener: function (changeEventHandler) {
+        this.removeListener('salesReceivedFromAPI', changeEventHandler);
     }
+
+
 })
+
+function handleAction(action) {
+    if (action.type === 'get_sales_list') {
+
+        Salestore.getAllListItems();
+    }
+}
 
 Salestore.dispatchToken = Dispatcher.register(handleAction);
 
@@ -50462,4 +50586,5 @@ module.exports = Salestore;
 
 
 
-},{"../dispatcher/Dispatcher":394,"events":199,"jquery":222,"object-assign":224}]},{},[1]);
+
+},{"../dispatcher/Dispatcher":395,"events":199,"jquery":222,"object-assign":224}]},{},[1]);

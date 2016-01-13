@@ -3,13 +3,11 @@ var uuid = require('node-uuid');
 var ListItemActionCreators = require('../../actions/ListItemActionCreators');
 var ListItemStore = require('../../stores/ListItemStore');
 
-
 var styleRequired = {
     color: "#ffaaaa"
 };
 
     var AddListItem = React.createClass({
-
 
     handleChange : function(event){
         var id = this.state.activeRecord.Id;
@@ -19,8 +17,6 @@ var styleRequired = {
             ItemName: this.refs.ItemName.value,
             Price: this.refs.Price.value
         };
-
-        //this.setState({});
 
         this.setState({activeRecord: item});
 
