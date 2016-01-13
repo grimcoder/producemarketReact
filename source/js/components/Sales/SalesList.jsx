@@ -1,10 +1,12 @@
 var React = require('react');
 var List = require('./Sales.jsx');
 var AddListItem = require('./AddListItem.jsx')
+var SalesStore = require('./../../stores/SalesStore')
+
 var SalesList = React.createClass({
 
     getInitialState: function(){
-      return {list : {}}
+        //SalesStore.
     },
     render: function () {
         var items = this.state.list;

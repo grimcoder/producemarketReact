@@ -4,6 +4,9 @@ var ListHeader = require('./../Prices/ListHeader.jsx');
 
 var Sales = React.createClass({
 
+    getItemsCount : function(){
+        return this.props.items.length
+    },
 
     render: function () {
 
@@ -11,7 +14,9 @@ var Sales = React.createClass({
             <div>
 
                 <h3 className="page-header">
-                    <ListHeader title='Sales' totalNumberOfListItems={8} />
+
+                    <ListHeader title='Sales' totalNumberOfListItems={this.getItemsCount()} />
+
                 </h3>
 
             </div>

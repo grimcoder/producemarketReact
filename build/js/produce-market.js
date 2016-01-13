@@ -13276,8 +13276,7 @@ module.exports={
     }
   ],
   "directories": {},
-  "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.0.2.tgz",
-  "readme": "ERROR: No README data found!"
+  "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.0.2.tgz"
 }
 
 },{}],66:[function(require,module,exports){
@@ -14721,8 +14720,13 @@ DERNode.prototype._decodeObjid = function decodeObjid(buffer, values, relative) 
   else
     result = [first, second].concat(identifiers.slice(1));
 
-  if (values)
-    result = values[result.join(' ')];
+  if (values) {
+    var tmp = values[result.join(' ')];
+    if (tmp === undefined)
+      tmp = values[result.join('.')];
+    if (tmp !== undefined)
+      result = tmp;
+  }
 
   return result;
 };
@@ -50248,6 +50252,9 @@ var ListHeader = require('./../Prices/ListHeader.jsx');
 
 var Sales = React.createClass({displayName: "Sales",
 
+    getItemsCount : function(){
+        return this.props.items.length
+    },
 
     render: function () {
 
@@ -50255,7 +50262,9 @@ var Sales = React.createClass({displayName: "Sales",
             React.createElement("div", null, 
 
                 React.createElement("h3", {className: "page-header"}, 
-                    React.createElement(ListHeader, {title: "Sales", totalNumberOfListItems: 8})
+
+                    React.createElement(ListHeader, {title: "Sales", totalNumberOfListItems: this.getItemsCount()})
+
                 )
 
             )
@@ -50271,10 +50280,12 @@ module.exports = Sales;
 var React = require('react');
 var List = require('./Sales.jsx');
 var AddListItem = require('./AddListItem.jsx')
+var SalesStore = require('./../../stores/SalesStore')
+
 var SalesList = React.createClass({displayName: "SalesList",
 
     getInitialState: function(){
-      return {list : {}}
+        //SalesStore.
     },
     render: function () {
         var items = this.state.list;
@@ -50305,7 +50316,7 @@ var SalesList = React.createClass({displayName: "SalesList",
 
 module.exports = SalesList;
 
-},{"./AddListItem.jsx":391,"./Sales.jsx":392,"react":381}],394:[function(require,module,exports){
+},{"./../../stores/SalesStore":396,"./AddListItem.jsx":391,"./Sales.jsx":392,"react":381}],394:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;
 module.exports = new Dispatcher();
 
@@ -50365,16 +50376,16 @@ function removeAllListItems() {
 
 var ListItemStore = objectAssign({}, EventEmitter.prototype, {
 
-    getAllListItems: function () {
-        $.get(apiHost + '/api/prices', function(result) {
+        getAllListItems: function () {
+            $.get(apiHost + '/api/prices', function(result) {
 
-            result.map(function(item){
-                shoppingList[item.Id] = item;
-            });
+                result.map(function(item){
+                    shoppingList[item.Id] = item;
+                });
 
-            ListItemStore.emit('pricesRecieved',shoppingList);
-        }.bind(this));
-    },
+                ListItemStore.emit('pricesRecieved',shoppingList);
+            }.bind(this));
+        },
 
     getActiveRecord: function(){
         return activeRecord;
@@ -50416,6 +50427,39 @@ function handleAction(action) {
 ListItemStore.dispatchToken = Dispatcher.register(handleAction);
 
 module.exports = ListItemStore;
+
+
+},{"../dispatcher/Dispatcher":394,"events":199,"jquery":222,"object-assign":224}],396:[function(require,module,exports){
+var Dispatcher = require('../dispatcher/Dispatcher');
+var EventEmitter = require('events').EventEmitter;
+var objectAssign = require('object-assign');
+
+var shoppingList = {};
+var activeRecord = {};
+
+var $ = require('jquery');
+var apiHost = "http://" + 'taraskovtun.com' + ":3001";
+
+var Salestore = objectAssign({}, EventEmitter.prototype, {
+
+    getAllListItems: function () {
+        $.get(apiHost + '/api/prices', function(result) {
+
+            result.map(function(item){
+                shoppingList[item.Id] = item;
+            });
+
+            ListItemStore.emit('salesReceivedFromAPI',shoppingList);
+
+        }.bind(this));
+    }
+})
+
+Salestore.dispatchToken = Dispatcher.register(handleAction);
+
+module.exports = Salestore;
+
+
 
 
 },{"../dispatcher/Dispatcher":394,"events":199,"jquery":222,"object-assign":224}]},{},[1]);

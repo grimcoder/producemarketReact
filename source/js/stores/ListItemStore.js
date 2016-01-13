@@ -53,16 +53,16 @@ function removeAllListItems() {
 
 var ListItemStore = objectAssign({}, EventEmitter.prototype, {
 
-    getAllListItems: function () {
-        $.get(apiHost + '/api/prices', function(result) {
+        getAllListItems: function () {
+            $.get(apiHost + '/api/prices', function(result) {
 
-            result.map(function(item){
-                shoppingList[item.Id] = item;
-            });
+                result.map(function(item){
+                    shoppingList[item.Id] = item;
+                });
 
-            ListItemStore.emit('pricesRecieved',shoppingList);
-        }.bind(this));
-    },
+                ListItemStore.emit('pricesRecieved',shoppingList);
+            }.bind(this));
+        },
 
     getActiveRecord: function(){
         return activeRecord;
